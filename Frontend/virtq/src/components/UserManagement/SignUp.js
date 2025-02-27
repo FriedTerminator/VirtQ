@@ -35,13 +35,15 @@ class SignUp extends Component {
             password: this.state.password,
             confirmPassword: this.state.confirmPassword
         };
+
+        console.log("You have signed up", newUser);
     }
 
   render() {
     const {errors} = this.state;
 
     return (
-        <div className="register">
+        <div className="signup">
             <div className="container">
                 <div className="row">
                     <div className="col-md-8 m-auto">
@@ -80,7 +82,7 @@ class SignUp extends Component {
                                     <div className="invalid-feedback">{errors.confirmPassword}</div>
                                 )}
                             </div>
-                            <input type="submit" className="btn btn-info btn-block mt-4" />
+                            <input type="submit" className="btn btn-info btn-block" />
                         </form>
                     </div>
                 </div>

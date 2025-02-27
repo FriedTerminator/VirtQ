@@ -9,14 +9,14 @@ export default class Landing extends Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-md-12 text-center">
-                            <h1 className="display-3 mb-4">VirtQ</h1>
+                            <h1 className="display-2 mb-4">Welcome to VirtQ</h1>
                             <p className="lead">
                                 Create your account to create a Q&A session or to join one!
                             </p>
                             <hr />
-                                <Link className="btn btn-lg btn-primary mr-2" to="/register">
+                            <Link className="btn btn-lg btn-primary mr-2" to="/signup">
                                 Sign Up
-                                </Link>
+                            </Link>
                             <Link className="btn btn-lg btn-secondary mr-2" to="/login">
                                 Login
                             </Link>

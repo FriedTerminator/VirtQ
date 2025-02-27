@@ -51,7 +51,7 @@ class Login extends Component {
     render() {
         const { errors } = this.state;
         return (
-            <div className="login">
+            <div className="login top">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-8 m-auto">
@@ -83,7 +83,7 @@ class Login extends Component {
                                     />
                                     {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                                 </div>
-                                <input type="submit" className="btn btn-info btn-block mt-4" />
+                                <input type="submit" className="btn btn-info btn-block" />
                             </form>
                         </div>
                     </div>
@@ -94,7 +94,7 @@ class Login extends Component {
 }
 
 Login.propTypes = {
-    errors: PropTypes.object.isRequired,
+    errors: PropTypes.object.isRequired
 };
 
 export default Login;  // Wrap component with withRouter
