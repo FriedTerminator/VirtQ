@@ -5,8 +5,8 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="dashboard">
-        <Link className="nav-link" to="/inputquestion">
-          Join
+        <Link className="nav-link" to="/details">
+          Create Session
         </Link>
       </div>
     )

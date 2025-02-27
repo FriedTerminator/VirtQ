@@ -1,38 +1,70 @@
-import React, { useState } from "react";
+import React, { Component } from 'react';
 import PropTypes from "prop-types";
+import classnames from 'classnames';
 
-const InputQuestion = ({ onQuestionSubmit }) => {
-  const [question, setQuestion] = useState("");
+class InputQuestion extends Component {
+    constructor() {
+        super()
 
-  const handleChange = (e) => {
-    setQuestion(e.target.value);
-  };
+        this.state = {
+            question: "",
+            errors: {}
+        };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Submit up to the parent
-    onQuestionSubmit(question);
-  };
+        this.onChange = this.onChange.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+    }
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <div className="form-group">
-        <input
-          type="text"
-          name="question"
-          className="form-control form-control-lg"
-          placeholder="Enter your question"
-          value={question}
-          onChange={handleChange}
-        />
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+            this.setState({ errors: nextProps.errors });
+        }
+    }
+
+    onChange(e) {
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+    onSubmit(e) {
+        e.preventDefault();
+
+        const newQuestion = {
+            question: this.state.question
+        };
+
+        console.log("Question submitted", newQuestion);
+    }
+
+  render() {
+    const { errors } = this.state;
+    return (
+      <div className="input-question top">
+        <div className="container">
+            <div className="row">
+                <h1 className="display-4 text-center">Enter Your Question</h1>
+                <div className="form-group">
+                    <input 
+                    type="question" 
+                    className={classnames("form-control form-control-lg", {
+                        "is-invalid": errors.question
+                    })}
+                    placeholder="Enter your question"
+                    name="question"
+                    value={this.state.question}
+                    onChange={this.onChange}
+                    />
+                    {errors.username && <div className="invalid-feedback">{errors.question}</div>}
+                </div>
+                <input type="submit" className="btn btn-info btn-block " />
+            </div>
+        </div>
       </div>
-      <input type="submit" className="btn btn-info btn-block" />
-    </form>
-  );
-};
+    )
+  }
+}
 
-InputQuestion.propTypes = {
-  onQuestionSubmit: PropTypes.func.isRequired,
+InputQuestion.props = {
+    errors: PropTypes.object.isRequired
 };
 
 export default InputQuestion;
