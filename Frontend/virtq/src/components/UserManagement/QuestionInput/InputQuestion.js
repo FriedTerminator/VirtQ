@@ -1,70 +1,63 @@
-import React, { Component } from 'react';
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-class InputQuestion extends Component {
-    constructor() {
-        super()
+function InputQuestion({ errors }) {
+  const [question, setQuestion] = useState('');
+  const [localErrors, setLocalErrors] = useState({});
 
-        this.state = {
-            question: "",
-            errors: {}
-        };
-
-        this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+  // This hook runs whenever `errors` changes.
+  useEffect(() => {
+    if (errors) {
+      setLocalErrors(errors);
     }
+  }, [errors]);
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.errors) {
-            this.setState({ errors: nextProps.errors });
-        }
-    }
+  const onChange = (e) => {
+    setQuestion(e.target.value);
+  };
 
-    onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
-    }
+  const onSubmit = (e) => {
+    e.preventDefault();
 
-    onSubmit(e) {
-        e.preventDefault();
+    const newQuestion = { question };
+    console.log('Question submitted', newQuestion);
+    // ...call an API or dispatch Redux action here...
+  };
 
-        const newQuestion = {
-            question: this.state.question
-        };
-
-        console.log("Question submitted", newQuestion);
-    }
-
-  render() {
-    const { errors } = this.state;
-    return (
-      <div className="input-question top">
-        <div className="container">
-            <div className="row">
-                <h1 className="display-4 text-center">Enter Your Question</h1>
-                <div className="form-group">
-                    <input 
-                    type="question" 
-                    className={classnames("form-control form-control-lg", {
-                        "is-invalid": errors.question
-                    })}
-                    placeholder="Enter your question"
-                    name="question"
-                    value={this.state.question}
-                    onChange={this.onChange}
-                    />
-                    {errors.username && <div className="invalid-feedback">{errors.question}</div>}
-                </div>
-                <input type="submit" className="btn btn-info btn-block " />
-            </div>
+  return (
+    <div className="input-question top">
+      <div className="container">
+        <div className="row">
+          <h1 className="display-4 text-center">Enter Your Question</h1>
+          <form onSubmit={onSubmit} className="form-group">
+            <input
+              type="text"
+              className={classnames('form-control form-control-lg', {
+                'is-invalid': localErrors.question,
+              })}
+              placeholder="Enter your question"
+              name="question"
+              value={question}
+              onChange={onChange}
+            />
+            {localErrors.question && (
+              <div className="invalid-feedback">{localErrors.question}</div>
+            )}
+            <input
+              type="submit"
+              className="btn btn-info btn-block mt-3"
+              value="Submit"
+            />
+          </form>
         </div>
       </div>
-    )
-  }
+    </div>
+  );
 }
 
-InputQuestion.props = {
-    errors: PropTypes.object.isRequired
+InputQuestion.propTypes = {
+  errors: PropTypes.object.isRequired,
 };
 
 export default InputQuestion;

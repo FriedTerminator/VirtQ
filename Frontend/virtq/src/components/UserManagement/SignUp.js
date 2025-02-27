@@ -1,103 +1,146 @@
-import React, { Component } from 'react';
-import PropTypes from "prop-types";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-class SignUp extends Component {
-    constructor() {
-        super();
+function SignUp({ errors }) {
+  // Local states for form fields
+  const [fullName, setFullName] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-        this.state = {
-            username: "",
-            fullName: "",
-            password: "",
-            confirmPassword: "",
-            errors: {}
-        };
-        this.onChange = this.onChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+  // Local errors state
+  const [localErrors, setLocalErrors] = useState({});
+
+  /**
+   * Sync incoming `errors` prop to local state whenever `errors` changes
+   */
+  useEffect(() => {
+    if (errors) {
+      setLocalErrors(errors);
     }
+  }, [errors]);
 
-    componentWillReceiveProps(nextProps) {
-        if(nextProps.errors) {
-            this.setState({ errors: nextProps.errors });
-        }
+  /**
+   * Handle input changes
+   */
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case 'fullName':
+        setFullName(value);
+        break;
+      case 'username':
+        setUsername(value);
+        break;
+      case 'password':
+        setPassword(value);
+        break;
+      case 'confirmPassword':
+        setConfirmPassword(value);
+        break;
+      default:
+        break;
     }
+  };
 
-    onChange(e) {
-        this.setState({ [e.target.name]: e.target.value });
-    }
+  /**
+   * Handle form submission
+   */
+  const onSubmit = (e) => {
+    e.preventDefault();
 
-    onSubmit(e) {
-        e.preventDefault();
-        const newUser = {
-            username: this.state.username,
-            fullName: this.state.fullName,
-            password: this.state.password,
-            confirmPassword: this.state.confirmPassword
-        };
+    const newUser = {
+      fullName,
+      username,
+      password,
+      confirmPassword,
+    };
 
-        console.log("You have signed up", newUser);
-    }
+    console.log('You have signed up', newUser);
+    // Perform the sign-up logic here (e.g., call an API or dispatch a Redux action).
+  };
 
-  render() {
-    const {errors} = this.state;
-
-    return (
-        <div className="signup">
-            <div className="container">
-                <div className="row">
-                    <div className="col-md-8 m-auto">
-                        <h1 className="display-4 text-center">Sign Up</h1>
-                        <p className="lead text-center">Create your Account</p>
-                        <form onSubmit={this.onSubmit}>
-                            <div className="form-group">
-                                <input type="text" className={classnames("form-control form-control-lg", {
-                                    "is-invalid": errors.fullName
-                                })} placeholder="Full Name" name="fullName" value={this.state.fullName} onChange={this.onChange} />
-                                {errors.fullName && (
-                                    <div className="invalid-feedback">{errors.fullName}</div>
-                                )}
-                            </div>
-                            <div className="form-group">
-                                <input type="text" className={classnames("form-control form-control-lg", {
-                                    "is-invalid": errors.username
-                                })} placeholder="Email Address (Username)" name="username" value={this.state.username} onChange={this.onChange} />
-                                {errors.username && (
-                                    <div className="invalid-feedback">{errors.username}</div>
-                                )}
-                            </div>
-                            <div className="form-group">
-                                <input type="password" className={classnames("form-control form-control-lg", {
-                                    "is-invalid": errors.password
-                                })} placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} />
-                                {errors.password && (
-                                    <div className="invalid-feedback">{errors.password}</div>
-                                )}
-                            </div>
-                            <div className="form-group">
-                                <input type="password" className={classnames("form-control form-control-lg", {
-                                    "is-invalid": errors.confirmPassword
-                                })} placeholder="Confirm Password" name="confirmPassword" value={this.state.confirmPassword} onChange={this.onChange} />
-                                {errors.confirmPassword && (
-                                    <div className="invalid-feedback">{errors.confirmPassword}</div>
-                                )}
-                            </div>
-                            <input type="submit" className="btn btn-info btn-block" />
-                        </form>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="signup">
+      <div className="container">
+        <div className="row">
+          <div className="col-md-8 m-auto">
+            <h1 className="display-4 text-center">Sign Up</h1>
+            <p className="lead text-center">Create your Account</p>
+            <form onSubmit={onSubmit}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className={classnames('form-control form-control-lg', {
+                    'is-invalid': localErrors.fullName,
+                  })}
+                  placeholder="Full Name"
+                  name="fullName"
+                  value={fullName}
+                  onChange={onChange}
+                />
+                {localErrors.fullName && (
+                  <div className="invalid-feedback">{localErrors.fullName}</div>
+                )}
+              </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className={classnames('form-control form-control-lg', {
+                    'is-invalid': localErrors.username,
+                  })}
+                  placeholder="Email Address (Username)"
+                  name="username"
+                  value={username}
+                  onChange={onChange}
+                />
+                {localErrors.username && (
+                  <div className="invalid-feedback">{localErrors.username}</div>
+                )}
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  className={classnames('form-control form-control-lg', {
+                    'is-invalid': localErrors.password,
+                  })}
+                  placeholder="Password"
+                  name="password"
+                  value={password}
+                  onChange={onChange}
+                />
+                {localErrors.password && (
+                  <div className="invalid-feedback">{localErrors.password}</div>
+                )}
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  className={classnames('form-control form-control-lg', {
+                    'is-invalid': localErrors.confirmPassword,
+                  })}
+                  placeholder="Confirm Password"
+                  name="confirmPassword"
+                  value={confirmPassword}
+                  onChange={onChange}
+                />
+                {localErrors.confirmPassword && (
+                  <div className="invalid-feedback">{localErrors.confirmPassword}</div>
+                )}
+              </div>
+              <input type="submit" className="btn btn-info btn-block" value="Sign Up" />
+            </form>
+          </div>
         </div>
-    )
-  }
+      </div>
+    </div>
+  );
 }
 
 SignUp.propTypes = {
-    error: PropTypes.object.isRequired,
-}
-
-// const mapStateToProps = state => ({
-//     errors: state.errors,
-// });
+  // This should match the props name used in the component (changed from error to errors)
+  errors: PropTypes.object.isRequired,
+};
 
 export default SignUp;

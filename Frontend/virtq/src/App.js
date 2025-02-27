@@ -8,6 +8,7 @@ import Landing from './components/Layout/Landing';
 import SignUp from './components/UserManagement/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import InputQuestion from './components/UserManagement/QuestionInput/InputQuestion';
+import CreatingSession from './components/Q&A/CreatingSession';
 
 class App extends Component {
   render() {
@@ -20,6 +21,7 @@ class App extends Component {
           <Route exact path="/signup" element={<SignUp />}/>
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/inputquestion" element={<InputQuestion />} />
+          <Route exact path="/creating-session" element={<CreatingSession />} />
         </Routes>
       </Router>
     );
