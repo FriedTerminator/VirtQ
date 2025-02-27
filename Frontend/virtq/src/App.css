@@ -1,3 +1,255 @@
+/*******************************
+ * [ Your Existing Styles ]
+ *******************************/
+
+/* Images take full width */
+img {
+  width: 100%;
+}
+
+/* Navbar background color */
+.navbar {
+  background-color: #ff7417;
+}
+
+/* FontAwesome icons */
+.fa.fa-edit {
+  color: #18a2b9;
+}
+.fa.fa-minus-circle {
+  color: red;
+}
+
+/* Hover states for list-group items */
+.list-group-item.delete:hover {
+  cursor: grab;
+  background-color: pink;
+}
+.list-group-item.update:hover {
+  cursor: grab;
+  background-color: gainsboro;
+}
+.list-group-item.board:hover {
+  cursor: grab;
+  background-color: gainsboro;
+}
+
+/* Landing section background (optionally commented out if you use the multi-step gradient) */
+.landing {
+  position: relative;
+  /* background: url("../img/showcase.jpg") no-repeat; */
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  margin-top: -24px;   /* negative margin from your code */
+  margin-bottom: -50px;
+}
+
+.landing-inner {
+  padding-top: 80px;
+}
+
+/* Dark overlay for landing page */
+.dark-overlay {
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Additional form styles from your code */
+.input-question {
+  margin-top: 15px;
+}
+.input-question .form-group {
+  margin-top: 15px;
+  width: 1000px;
+  padding-left: 300px;
+}
+
+.signup {
+  margin-top: 15px;
+}
+
+.login {
+  margin-top: 15px;
+}
+
+/* Card opacity tweak */
+.card-form {
+  opacity: 0.9;
+}
+
+/* Profile images */
+.latest-profiles-img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Placeholder color override */
+.form-control::placeholder {
+  color: #bbb !important;
+}
+
+/* Default form group spacing */
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Default button margin */
+.btn {
+  margin: 5px;
+}
+
+/*******************************
+ * [ Multi-Step Form Styles ]
+ *******************************/
+
+/* 
+  You can keep or remove the gradient background. 
+  If you want your .landing background to show, comment out the lines below.
+*/
+html,
+body {
+  height: 100%;
+  margin: 0; 
+  padding: 0; 
+  font-family: "Montserrat", arial, verdana;
+  background: linear-gradient(
+      rgba(196, 102, 0, 0.6),
+      rgba(155, 89, 182, 0.6)
+    )
+    no-repeat center center fixed;
+  background-size: cover;
+}
+
+/* Container for the multi-step form */
+#msform {
+  width: 400px;
+  margin: 50px auto;
+  text-align: center;
+  position: relative;
+}
+
+/* Each step is in a fieldset */
+#msform fieldset {
+  background: white;
+  border: 0 none;
+  border-radius: 3px;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  padding: 20px 30px;
+  box-sizing: border-box;
+  width: 80%;
+  margin: 0 10%;
+  position: relative;
+}
+
+/* Hide fieldsets except the current step */
+#msform fieldset:not(:first-of-type) {
+  display: none;
+}
+
+/* Inputs used inside the multi-step form */
+#msform input,
+#msform textarea {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: "Montserrat";
+  color: #2c3e50;
+  font-size: 13px;
+}
+
+/* Buttons for next/previous/submit in the multi-step form */
+.action-button {
+  width: 120px;
+  background: #27ae60;
+  font-weight: bold;
+  color: white;
+  border: 0 none;
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 10px;
+  margin: 10px 5px;
+  font-size: 14px;
+}
+
+.action-button:hover,
+.action-button:focus {
+  box-shadow: 0 0 0 2px white, 0 0 0 3px #27ae60;
+}
+
+/* Titles inside each fieldset */
+.fs-title {
+  font-size: 15px;
+  text-transform: uppercase;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+.fs-subtitle {
+  font-weight: normal;
+  font-size: 13px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Progress bar for the multi-step form */
+#progressbar {
+  margin-bottom: 30px;
+  overflow: hidden;
+  counter-reset: step;
+}
+
+/* Each step in the progress bar */
+#progressbar li {
+  list-style-type: none;
+  color: white;
+  text-transform: uppercase;
+  font-size: 9px;
+  width: 50%;
+  float: left;
+  position: relative;
+}
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 20px;
+  line-height: 20px;
+  display: block;
+  font-size: 10px;
+  color: #333;
+  background: white;
+  border-radius: 3px;
+  margin: 0 auto 5px auto;
+  text-align: center;
+}
+/* Connectors between steps */
+#progressbar li:after {
+  content: "";
+  width: 100%;
+  height: 2px;
+  background: white;
+  position: absolute;
+  left: -50%;
+  top: 9px;
+  z-index: -1;
+}
+#progressbar li:first-child:after {
+  content: none;
+}
+#progressbar li.active:before,
+#progressbar li.active:after {
+  background: #27ae60;
+  color: white;
+}
+
+
+/* Old CSS Code
 img {
   width: 100%;
 }
@@ -31,7 +283,7 @@ img {
 
 .landing {
   position: relative;
-  /* background: url("../img/showcase.jpg") no-repeat; */
+  /* background: url("../img/showcase.jpg") no-repeat; 
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -92,3 +344,5 @@ img {
 .btn {
   margin: 5px;
 }
+
+*/

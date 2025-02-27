@@ -7,7 +7,7 @@ import './App.css';
 import Landing from './components/Layout/Landing';
 import SignUp from './components/UserManagement/SignUp';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import InputQuestion from './components/UserManagement/InputQuestion';
+import InputQuestion from './components/UserManagement/QuestionInput/InputQuestion';
 
 class App extends Component {
   render() {
