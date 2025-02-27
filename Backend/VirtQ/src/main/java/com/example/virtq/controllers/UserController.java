@@ -2,6 +2,7 @@ package com.example.virtq.controllers;
 
 import com.example.virtq.domain.User;
 import com.example.virtq.services.UserService;
+import com.example.virtq.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +18,14 @@ import jakarta.validation.Valid;
 public class UserController {
 
     @Autowired
+    private UserValidator userValidator;
+
+    @Autowired
     private UserService userService;
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
+        userValidator.validate(user, result);
         User newUser = userService.saveUser(user);
 
         return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
