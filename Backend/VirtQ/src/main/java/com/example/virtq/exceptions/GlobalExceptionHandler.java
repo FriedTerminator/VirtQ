@@ -2,12 +2,14 @@ package com.example.virtq.exceptions;
 
 import com.example.virtq.services.MapValidationErrorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.context.request.WebRequest;
 
 @RestController
 @RestControllerAdvice
@@ -16,10 +18,6 @@ public class GlobalExceptionHandler {
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
 
-    /**
-     * Handles all validation errors thrown by @Valid,
-     * which triggers a MethodArgumentNotValidException when input is invalid.
-     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
         BindingResult bindingResult = ex.getBindingResult();
@@ -31,5 +29,11 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGlobalExceptions(Exception ex) {
         return ResponseEntity.internalServerError().body("An unexpected error occurred.");
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleUsernameException(UsernameAlreadyExistsException ex, WebRequest request) {
+        UsernameAlreadyExistsExceptionResponse exceptionResponse = new UsernameAlreadyExistsExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }
