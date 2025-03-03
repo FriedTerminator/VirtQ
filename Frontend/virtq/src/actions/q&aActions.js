@@ -25,6 +25,14 @@ export const getQA = (id, history) => async dispatch => {
     });
 };
 
+export const getQAS = () => async dispatch => {
+    const res = await axios.get("/api/qas");
+    dispatch({
+        type: GET_ERRORS,
+        payload: res.data
+    });
+};
+
 export const deleteQA = id => async dispatch => {
     if(window.confirm("Are you sure? This will delete your Q&A?")) {
         await axios.delete(`/api/q&a/${id}`);
