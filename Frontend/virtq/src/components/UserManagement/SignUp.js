@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 function SignUp({ errors }) {
-  // Local states for form fields
   const [fullName, setFullName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  // Local errors state
   const [localErrors, setLocalErrors] = useState({});
 
   /**
@@ -58,7 +56,6 @@ function SignUp({ errors }) {
     };
 
     console.log('You have signed up', newUser);
-    // Perform the sign-up logic here (e.g., call an API or dispatch a Redux action).
   };
 
   return (
@@ -139,7 +136,6 @@ function SignUp({ errors }) {
 }
 
 SignUp.propTypes = {
-  // This should match the props name used in the component (changed from error to errors)
   errors: PropTypes.object.isRequired,
 };
 

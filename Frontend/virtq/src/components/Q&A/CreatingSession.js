@@ -38,47 +38,47 @@ function CreatingSession({ errors }) {
       <div className="creating-session">
         <div className="container">
             <div className="row">
-                <h1 className="display-2 mb-4 text-center">Create a Q&A Session</h1>
-                <form onSubmit={onSubmit} className="form-group">
-                    <div className="form-group">
-                        <label htmlFor="title">Q&A Name</label>
-                        <input
-                            type="text"
-                            className={classnames("form-control form-control-lg", {
-                                "is-invalid": localErrors.title
-                            })}
-                            placeholder="Enter the Q&A name"
-                            name="title"
-                            value={title}
-                            onChange={onChange}
-                        />
-                        {localErrors.name && (
-                            <div className="invalid-feedback">{localErrors.name}</div>
-                        )}
-                    </div>
+                <div className="col-md-8 m-auto">
+                    <h1 className="display-4 mb-4 text-center">Create a Q&A Session</h1>
+                    <form onSubmit={onSubmit} className="form-group">
+                        <div className="form-group">
+                            <input
+                                type="text"
+                                className={classnames("form-control form-control-lg", {
+                                    "is-invalid": localErrors.title
+                                })}
+                                placeholder="Enter the Q&A name"
+                                name="title"
+                                value={title}
+                                onChange={onChange}
+                            />
+                            {localErrors.name && (
+                                <div className="invalid-feedback">{localErrors.name}</div>
+                            )}
+                        </div>
 
-                    <div className="form-group mt-3">
-                        <label htmlFor="host">Host Name</label>
-                        <input
-                            type="text"
-                            id="host"
-                            name="host"
-                            className={classnames("form-control form-control-lg", {
-                            "is-invalid": localErrors.host,
-                            })}
-                            placeholder="Enter the host name"
-                            value={host}
-                            onChange={onChange}
-                        />
-                        {localErrors.host && (
-                            <div className="invalid-feedback">{localErrors.host}</div>
-                        )}
-                    </div>
-                    
-                    <button type="submit" className="btn btn-info btn-block mt-3">
-                        Submit
-                    </button>
-                </form>
+                        <div className="form-group mt-3">
+                            <input
+                                type="text"
+                                id="host"
+                                name="host"
+                                className={classnames("form-control form-control-lg", {
+                                "is-invalid": localErrors.host,
+                                })}
+                                placeholder="Enter the host name"
+                                value={host}
+                                onChange={onChange}
+                            />
+                            {localErrors.host && (
+                                <div className="invalid-feedback">{localErrors.host}</div>
+                            )}
+                        </div>
+                        
+                        <button type="submit" className="btn btn-info btn-block mt-3">
+                            Submit
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
       </div>
