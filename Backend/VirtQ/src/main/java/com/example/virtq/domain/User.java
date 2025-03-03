@@ -27,6 +27,12 @@ public class User {
     @Transient
     private String confirmPassword;
 
+    public User() {
+    }
+
+    public User(User user){
+    }
+
     public Long getId() {
         return id;
     }

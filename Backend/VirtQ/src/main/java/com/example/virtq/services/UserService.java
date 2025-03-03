@@ -1,8 +1,8 @@
 package com.example.virtq.services;
 
 import com.example.virtq.domain.User;
+import com.example.virtq.exceptions.UsernameAlreadyExistsException;
 import com.example.virtq.repositories.UserRepository;
-import com.example.virtq.security.PasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
