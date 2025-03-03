@@ -1,0 +1,5 @@
+export const GET_ERRORS = "GET_ERRORS"
+
+export const GET_QA = "GET_QA" 
+export const GET_QAS = "GET_QAS"
+export const DELETE_QA = "DELETE_QA"

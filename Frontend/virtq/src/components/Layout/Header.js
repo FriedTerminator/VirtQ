@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-class Header extends Component {
-  render() {
+function Header() {
     return (
         <nav className="navbar navbar-expand-sm navbar-dark">
             <div className="container">
@@ -43,6 +42,5 @@ class Header extends Component {
         </nav>
     )
   }
-}
 
 export default Header;

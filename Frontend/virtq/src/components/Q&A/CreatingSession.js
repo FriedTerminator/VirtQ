@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 function CreatingSession({ errors }) {
     const[title, setTitle] = useState("");
     const[host, setHost] = useState("");
+    const[passcode, setPasscode] = useState("");
     const[localErrors, setLocalErrors] = useState({});
 
     useEffect(() => {
@@ -20,6 +21,8 @@ function CreatingSession({ errors }) {
             setTitle(fieldValue);
         } else if(fieldName === "host") {
             setHost(fieldValue);
+        } else if(fieldName === "passcode") {
+            setPasscode(fieldValue);
         }
     };
 
@@ -29,6 +32,7 @@ function CreatingSession({ errors }) {
         const newSession = {
             title,
             host,
+            passcode,
         };
 
         console.log("Creating new session:", newSession);
@@ -41,7 +45,7 @@ function CreatingSession({ errors }) {
                 <div className="col-md-8 m-auto">
                     <h1 className="display-4 mb-4 text-center">Create a Q&A Session</h1>
                     <form onSubmit={onSubmit} className="form-group">
-                        <div className="form-group">
+                        <div className="form-group mt-3">
                             <input
                                 type="text"
                                 className={classnames("form-control form-control-lg", {
@@ -71,6 +75,23 @@ function CreatingSession({ errors }) {
                             />
                             {localErrors.host && (
                                 <div className="invalid-feedback">{localErrors.host}</div>
+                            )}
+                        </div>
+
+                        <div className="form-group mt-3">
+                            <input
+                                type="text"
+                                id="passcode"
+                                name="passcode"
+                                className={classnames("form-control form-control-lg", {
+                                "is-invalid": localErrors.passcode,
+                                })}
+                                placeholder="Please create a code to join the Q&A session"
+                                value={passcode}
+                                onChange={onChange}
+                            />
+                            {localErrors.host && (
+                                <div className="invalid-feedback">{localErrors.passcode}</div>
                             )}
                         </div>
                         
