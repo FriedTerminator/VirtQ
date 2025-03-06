@@ -16,4 +16,8 @@ public class QAService {
 
         return qa;
     }
+
+    public Iterable<QA> findAllQAs(String username) {
+        return qaRepository.findAll();
+    }
 }
