@@ -27,6 +27,8 @@ public class QA {
     @Column(updatable = false)
     private Date create_At;
 
+    private String qaLeader;
+
     public QA() {
 
     }
@@ -69,5 +71,13 @@ public class QA {
 
     public void setCreate_At(Date create_At) {
         this.create_At = create_At;
+    }
+
+    public String getQaLeader() {
+        return qaLeader;
+    }
+
+    public void setQaLeader(String qaLeader) {
+        this.qaLeader = qaLeader;
     }
 }

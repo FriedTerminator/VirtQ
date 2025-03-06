@@ -8,4 +8,8 @@ import org.springframework.stereotype.Repository;
 public interface QARepository extends CrudRepository<QA, Long> {
 
     QA findByQAIdentifier(String qaIdentifier);
+
+    Iterable<QA> findAll();
+
+    Iterable<QA> findAllByQALeader(String username);
 }
