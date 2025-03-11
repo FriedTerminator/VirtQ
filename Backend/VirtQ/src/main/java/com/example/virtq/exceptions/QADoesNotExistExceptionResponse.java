@@ -7,11 +7,11 @@ public class QADoesNotExistExceptionResponse {
         this.qaDoesNotExist = qaDoesNotExist;
     }
 
-    public String getQaNotFound() {
+    public String getQaDoesNotExist() {
         return qaDoesNotExist;
     }
 
-    public void setQaNotFound(String qaDoesNotExist) {
+    public void setQaDoesNotExist(String qaDoesNotExist) {
         this.qaDoesNotExist = qaDoesNotExist;
     }
 }

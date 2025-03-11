@@ -20,7 +20,8 @@ public class QAController {
 
     @PostMapping("")
     public ResponseEntity<?> createNewQA(@Valid @RequestBody QA qa, BindingResult result, Principal principal) {
-
+        QA qa1 = qaService.saveQA(qa, principal.getName());
+        return new ResponseEntity<QA>(qa1, HttpStatus.CREATED);
     }
 
     @GetMapping("/{qaId}")

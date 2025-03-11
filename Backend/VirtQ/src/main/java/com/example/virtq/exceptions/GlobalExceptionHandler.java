@@ -44,8 +44,14 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> handleQANotFoundException(QADoesNotExistException ex, WebRequest request){
+    public final ResponseEntity<Object> handleQANotFoundException(QANotFoundException ex, WebRequest request){
         QANotFoundExceptionResponse exceptionResponse = new QANotFoundExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleQANotFoundException(QAIdException ex, WebRequest request){
+        QAIdExceptionResponse exceptionResponse = new QAIdExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 }

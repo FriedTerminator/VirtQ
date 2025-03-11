@@ -1,7 +1,9 @@
 package com.example.virtq.services;
 
 import com.example.virtq.domain.QA;
+import com.example.virtq.domain.User;
 import com.example.virtq.exceptions.QADoesNotExistException;
+import com.example.virtq.exceptions.QAIdException;
 import com.example.virtq.exceptions.QANotFoundException;
 import com.example.virtq.repositories.QARepository;
 import com.example.virtq.repositories.UserRepository;
@@ -17,8 +19,26 @@ public class QAService {
     @Autowired
     private UserRepository userRepository;
 
+    public QA saveQA(QA qa, String username) {
+        try {
+            User user = userRepository.findByUsername(username);
+            qa.setUser(user);
+            qa.setQaLeader(user.getUsername());
+            qa.setQaIdentifier(qa.getQaIdentifier().toUpperCase());
+
+            if(qa.getId() == null) {
+
+            }
+
+            return qaRepository.save(qa);
+
+        } catch (Exception e) {
+            throw new QAIdException("Q&A with ID: '" + qa.getQaIdentifier() + "' already exists");
+        }
+    }
+
     public QA findByQAIdentifier(String qaId, String username){
-        QA qa = qaRepository.findByQAIdentifier(qaId);
+        QA qa = qaRepository.findByQaIdentifier(qaId);
 
         if(qa == null) {
             throw new QADoesNotExistException("The Q&A '" + qaId + "' does not exist");
@@ -32,7 +52,7 @@ public class QAService {
     }
 
     public Iterable<QA> findAllQAs(String username) {
-        return qaRepository.findAllByQALeader(username);
+        return qaRepository.findAllByQaLeader(username);
     }
 
     public void deleteQA(String qaId, String username) {

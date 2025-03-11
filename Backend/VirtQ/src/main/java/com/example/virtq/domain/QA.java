@@ -1,14 +1,14 @@
 package com.example.virtq.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.util.Date;
 
+@Entity
 public class QA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,8 +17,14 @@ public class QA {
     @NotBlank(message = "Must provide a Q&A name")
     private String name;
 
-    @NotBlank(message = "Must provide a host for the Q&A")
-    private String host;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    User user;
+
+    @NotBlank(message = "QA Identifier is required")
+    @Size(min = 4, max = 5, message = "Please use 4 to 5 characters")
+    @Column(updatable = false, unique = true)
+    private String qaIdentifier;
 
     @NotBlank(message = "Must provide a passcode to join Q&A")
     private String passcode;
@@ -49,12 +55,12 @@ public class QA {
         this.name = name;
     }
 
-    public String getHost() {
-        return host;
+    public String getQaIdentifier() {
+        return qaIdentifier;
     }
 
-    public void setHost(String host) {
-        this.host = host;
+    public void setQaIdentifier(String qaIdentifier) {
+        this.qaIdentifier = qaIdentifier;
     }
 
     public String getPasscode() {
@@ -79,5 +85,13 @@ public class QA {
 
     public void setQaLeader(String qaLeader) {
         this.qaLeader = qaLeader;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
