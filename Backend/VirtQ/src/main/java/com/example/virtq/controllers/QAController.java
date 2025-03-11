@@ -1,6 +1,7 @@
 package com.example.virtq.controllers;
 
 import com.example.virtq.domain.QA;
+import com.example.virtq.services.MapValidationErrorService;
 import com.example.virtq.services.QAService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,14 @@ public class QAController {
     @Autowired
     private QAService qaService;
 
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
+
     @PostMapping("")
     public ResponseEntity<?> createNewQA(@Valid @RequestBody QA qa, BindingResult result, Principal principal) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap!=null) return errorMap;
+
         QA qa1 = qaService.saveQA(qa, principal.getName());
         return new ResponseEntity<QA>(qa1, HttpStatus.CREATED);
     }

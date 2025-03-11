@@ -1,6 +1,7 @@
 package com.example.virtq.controllers;
 
 import com.example.virtq.domain.User;
+import com.example.virtq.services.MapValidationErrorService;
 import com.example.virtq.services.UserService;
 import com.example.virtq.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +24,14 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MapValidationErrorService mapValidationErrorService;
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if(errorMap!=null) return errorMap;
+
         userValidator.validate(user, result);
         User newUser = userService.saveUser(user);
 
