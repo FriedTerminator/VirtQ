@@ -14,6 +14,14 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
+
+import java.util.List;
 
 import static com.example.virtq.security.SecurityConstants.H2_URL;
 import static com.example.virtq.security.SecurityConstants.SIGN_UP_URLS;
@@ -52,8 +60,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .cors(cors -> {})
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint(unauthorizedHandler)
                 )
@@ -65,15 +73,30 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/favicon.ico", "/static/**", "/public/**").permitAll() // Allow public assets
-                                .requestMatchers("/api/auth/**").permitAll() // Allow authentication endpoints
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/favicon.ico")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/static/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
                                 .requestMatchers(SIGN_UP_URLS).permitAll()
                                 .requestMatchers(H2_URL).permitAll()
-                                .anyRequest().authenticated()// Authenticate other requests
+                                .anyRequest().authenticated()
                 );
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Adjust based on frontend
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }
