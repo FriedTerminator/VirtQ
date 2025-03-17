@@ -6,7 +6,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class QA {
@@ -34,6 +36,9 @@ public class QA {
     private Date create_At;
 
     private String qaLeader;
+
+    @OneToMany(mappedBy = "qa", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Question> questions = new ArrayList<>();
 
     public QA() {
 
@@ -93,5 +98,13 @@ public class QA {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(List<Question> questions) {
+        this.questions = questions;
     }
 }
