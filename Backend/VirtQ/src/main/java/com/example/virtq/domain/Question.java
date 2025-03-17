@@ -16,6 +16,13 @@ public class Question {
     @JoinColumn(name = "qa_id", nullable = false)
     private QA qa;
 
+    public Question(){}
+
+    public Question(String text, QA qa) {
+        this.text = text;
+        this.qa = qa;
+    }
+
     public Long getId() {
         return id;
     }

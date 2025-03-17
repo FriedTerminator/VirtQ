@@ -54,4 +54,10 @@ public class GlobalExceptionHandler {
         QAIdExceptionResponse exceptionResponse = new QAIdExceptionResponse(ex.getMessage());
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleQuestionNotFoundException(QAIdException ex, WebRequest request){
+        QuestionNotFoundExceptionResponse exceptionResponse = new QuestionNotFoundExceptionResponse(ex.getMessage());
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
 }
