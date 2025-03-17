@@ -7,8 +7,10 @@ import jakarta.validation.constraints.NotBlank;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "\"user\"")
@@ -35,6 +37,9 @@ public class User implements UserDetails {
     private String confirmPassword;
 
     private Date created_At;
+
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "user", orphanRemoval = true)
+    private List<QA> qas = new ArrayList<>();
 
     public User() {
     }
