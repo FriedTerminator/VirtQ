@@ -26,7 +26,7 @@ export const getQA = (id, history) => async dispatch => {
 };
 
 export const getQAS = () => async dispatch => {
-    const res = await axios.get("/api/qas");
+    const res = await axios.get("/api/q&a/all");
     dispatch({
         type: GET_ERRORS,
         payload: res.data
