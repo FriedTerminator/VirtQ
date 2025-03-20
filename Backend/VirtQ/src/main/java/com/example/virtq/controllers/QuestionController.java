@@ -1,5 +1,6 @@
 package com.example.virtq.controllers;
 
+import com.example.virtq.domain.QA;
 import com.example.virtq.domain.Question;
 import com.example.virtq.services.MapValidationErrorService;
 import com.example.virtq.services.QuestionService;
@@ -10,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/questions")
@@ -26,12 +26,12 @@ public class QuestionController {
         this.questionService = questionService;
     }
 
-    @PostMapping("")
-    public ResponseEntity<?> createQuestion(@RequestBody Question question, BindingResult result) {
+    @PostMapping("/{qaId}")
+    public ResponseEntity<?> createQuestion(@PathVariable QA qaId, @RequestBody Question question, BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap!=null) return errorMap;
 
-        Question savedQuestion = questionService.saveQuestion(question);
+        Question savedQuestion = questionService.saveQuestion(qaId, question);
         return new ResponseEntity<Question>(savedQuestion, HttpStatus.CREATED);
     }
 
@@ -44,6 +44,19 @@ public class QuestionController {
     public ResponseEntity<Question> getQuestion(@PathVariable Long id) {
         Question question = questionService.getQuestionById(id);
         return new ResponseEntity<Question>(question, HttpStatus.OK);
+    }
+
+    @PutMapping("/{qaId}/{id}/approve")
+    public ResponseEntity<?> approveQuestion(@PathVariable QA qaId, @PathVariable Long id) {
+        Question question = questionService.getQuestionById(id);
+        question.setApproved(true);
+        questionService.saveQuestion(qaId, question);
+        return new ResponseEntity<Question>(question, HttpStatus.OK);
+    }
+
+    @GetMapping("/qa/{qaId}/admin")
+    public ResponseEntity<List<Question>> getQuestionsForAdmin(@PathVariable Long qaId) {
+        return ResponseEntity.ok(questionService.getQuestionsByQAId(qaId));
     }
 
     @DeleteMapping("/{id}")

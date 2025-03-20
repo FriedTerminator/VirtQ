@@ -9,8 +9,11 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Question text is required")
     private String text;
+
+    @Column(nullable = false)
+    private boolean approved = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "qa_id", nullable = false)
@@ -37,6 +40,14 @@ public class Question {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
     }
 
     public QA getQa() {

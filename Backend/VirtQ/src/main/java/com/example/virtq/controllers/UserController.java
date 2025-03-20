@@ -1,7 +1,7 @@
 package com.example.virtq.controllers;
 
-import com.example.virtq.domain.User;
 import com.example.virtq.payload.JWTLoginSuccessResponse;
+import com.example.virtq.domain.User;
 import com.example.virtq.payload.LoginRequest;
 import com.example.virtq.security.JwtTokenProvider;
 import com.example.virtq.services.MapValidationErrorService;
