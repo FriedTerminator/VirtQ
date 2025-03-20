@@ -1,5 +1,6 @@
 package com.example.virtq.services;
 
+import com.example.virtq.config.QuestionWebSocketHandler;
 import com.example.virtq.domain.QA;
 import com.example.virtq.domain.Question;
 import com.example.virtq.exceptions.QANotFoundException;
@@ -18,8 +19,12 @@ public class QuestionService {
     @Autowired
     private QARepository qaRepository;
 
-    public QuestionService(QuestionRespository questionRespository) {
+    private final QuestionWebSocketHandler questionWebSocketHandler;
+
+    public QuestionService(QuestionRespository questionRespository, QARepository qaRepository, QuestionWebSocketHandler questionWebSocketHandler) {
         this.questionRespository = questionRespository;
+        this.qaRepository = qaRepository;
+        this.questionWebSocketHandler = questionWebSocketHandler;
     }
 
     public Question saveQuestion(QA qaId, Question question) {
@@ -30,7 +35,12 @@ public class QuestionService {
         }
 
         question.setQa(qa);
-        return questionRespository.save(question);
+
+        Question savedQuestion = questionRespository.save(question);
+
+        questionWebSocketHandler.sendNewQuestion(savedQuestion);
+
+        return savedQuestion;
     }
 
     public List<Question> getQuestionsByQAId(Long qaId) {
