@@ -1,32 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { createNewUser } from '../../actions/securityActions';
+import { useNavigate } from 'react-router-dom';
 
-function SignUp({ errors }) {
-  const [fullName, setFullName] = useState('');
+function SignUp({ createNewUser, errors }) {
+  const navigate = useNavigate();
+
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const [localErrors, setLocalErrors] = useState({});
 
-  /**
-   * Sync incoming `errors` prop to local state whenever `errors` changes
-   */
   useEffect(() => {
     if (errors) {
       setLocalErrors(errors);
     }
   }, [errors]);
 
-  /**
-   * Handle input changes
-   */
   const onChange = (e) => {
     const { name, value } = e.target;
     switch (name) {
-      case 'fullName':
-        setFullName(value);
+      case 'firstName':
+        setFirstName(value);
+        break;
+      case 'lastName':
+        setLastName(value);
         break;
       case 'username':
         setUsername(value);
@@ -49,13 +52,14 @@ function SignUp({ errors }) {
     e.preventDefault();
 
     const newUser = {
-      fullName,
+      firstName,
+      lastName,
       username,
       password,
       confirmPassword,
     };
 
-    console.log('You have signed up', newUser);
+    createNewUser(newUser, navigate);
   };
 
   return (
@@ -70,15 +74,30 @@ function SignUp({ errors }) {
                 <input
                   type="text"
                   className={classnames('form-control form-control-lg', {
-                    'is-invalid': localErrors.fullName,
+                    'is-invalid': localErrors.firstName,
                   })}
-                  placeholder="Full Name"
-                  name="fullName"
-                  value={fullName}
+                  placeholder="First Name"
+                  name="firstName"
+                  value={firstName}
                   onChange={onChange}
                 />
-                {localErrors.fullName && (
-                  <div className="invalid-feedback">{localErrors.fullName}</div>
+                {localErrors.firstName && (
+                  <div className="invalid-feedback">{localErrors.firstName}</div>
+                )}
+              </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  className={classnames('form-control form-control-lg', {
+                    'is-invalid': localErrors.lastName,
+                  })}
+                  placeholder="Full Name"
+                  name="lastName"
+                  value={lastName}
+                  onChange={onChange}
+                />
+                {localErrors.lastName && (
+                  <div className="invalid-feedback">{localErrors.lastName}</div>
                 )}
               </div>
               <div className="form-group">
@@ -136,7 +155,14 @@ function SignUp({ errors }) {
 }
 
 SignUp.propTypes = {
+  createNewUser: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
+  security: PropTypes.object.isRequired
 };
 
-export default SignUp;
+const mapStateToProps = state => ({
+  errors: state.errors || {},
+  security: state.security || {}
+})
+
+export default connect(mapStateToProps, {createNewUser})(SignUp);

@@ -3,7 +3,7 @@ import { GET_ERRORS, GET_QA, GET_QAS, DELETE_QA } from "./types";
 
 export const createQA = (qa, history) => async dispatch => {
     try {
-        await axios.post("/api/q&a", qa);
+        await axios.post("http://localhost:8080/api/qa", qa);
         history.push("/dashboard")
         dispatch({
             type: GET_ERRORS,
@@ -18,24 +18,28 @@ export const createQA = (qa, history) => async dispatch => {
 };
 
 export const getQA = (id, history) => async dispatch => {
-    const res = await axios.get(`/api/q&a/${id}`);
-    dispatch({
-        type: GET_ERRORS,
-        payload: res.data
-    });
+    try {
+        const res = await axios.get(`http://localhost:8080/api/qa/${id}`);
+        dispatch({
+            type: GET_QA,
+            payload: res.data
+        });
+    } catch(error) {
+        history.push("/dashboard");
+    }
 };
 
 export const getQAS = () => async dispatch => {
-    const res = await axios.get("/api/q&a/all");
+    const res = await axios.get("http://localhost:8080/api/qa/all");
     dispatch({
-        type: GET_ERRORS,
+        type: GET_QAS,
         payload: res.data
     });
 };
 
 export const deleteQA = id => async dispatch => {
     if(window.confirm("Are you sure? This will delete your Q&A?")) {
-        await axios.delete(`/api/q&a/${id}`);
+        await axios.delete(`http://localhost:8080/api/qa/${id}`);
         dispatch({
             type: DELETE_QA,
             payload: id

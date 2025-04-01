@@ -1,58 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { connect } from 'react-redux';
+import { login } from '../../actions/securityActions';
+import { useNavigate } from 'react-router-dom';
 
-function Login({ security, errors, navigate }) {
-  // Local state for username, password, and errors
+function Login({ login, security, errors}) {
+  const navigate = useNavigate(); // ✅ Call it here at the top of your component
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [localErrors, setLocalErrors] = useState({});
 
-  /**
-   * 1. If a valid token exists, navigate to /dashboard on mount or
-   *    whenever `security?.validToken` changes.
-   */
+  // ✅ Redirect when user is authenticated
   useEffect(() => {
     if (security?.validToken) {
       navigate('/dashboard');
     }
   }, [security, navigate]);
 
-  /**
-   * 2. If `errors` prop changes, sync it to localErrors state.
-   */
+  // Update local errors if props.errors change
   useEffect(() => {
     if (errors) {
       setLocalErrors(errors);
     }
   }, [errors]);
 
-  /**
-   * 3. Handle input changes
-   */
   const onChange = (e) => {
     const { name, value } = e.target;
-    if (name === 'username') {
-      setUsername(value);
-    } else if (name === 'password') {
-      setPassword(value);
-    }
+    if (name === 'username') setUsername(value);
+    if (name === 'password') setPassword(value);
   };
 
-  /**
-   * 4. Handle form submission
-   */
   const onSubmit = (e) => {
     e.preventDefault();
     const LoginRequest = {
       username,
       password,
     };
-    console.log('Login request submitted', LoginRequest);
-
-    // Do your login/validation request here.
-    // If successful, navigate to the dashboard:
-    navigate('/dashboard');
+    login(LoginRequest); // This should update state which triggers navigate via useEffect
   };
 
   return (
@@ -106,13 +92,16 @@ function Login({ security, errors, navigate }) {
 }
 
 Login.propTypes = {
-  // Provided by parent or Redux/Context
+  login: PropTypes.func.isRequired,
   security: PropTypes.shape({
     validToken: PropTypes.bool,
   }),
   errors: PropTypes.object.isRequired,
-  // Provided by react-router-dom (if using v6 with a custom HOC or pass as prop)
-  navigate: PropTypes.func.isRequired,
 };
 
-export default Login;
+const mapStateToProps = state => ({
+  security: state.security || {},
+  errors: state.errors || {}
+});
+
+export default connect(mapStateToProps, { login })(Login);

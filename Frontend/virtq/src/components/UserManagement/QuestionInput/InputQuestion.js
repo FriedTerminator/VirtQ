@@ -6,7 +6,6 @@ function InputQuestion({ errors }) {
   const [question, setQuestion] = useState('');
   const [localErrors, setLocalErrors] = useState({});
 
-  // This hook runs whenever `errors` changes.
   useEffect(() => {
     if (errors) {
       setLocalErrors(errors);
@@ -22,7 +21,6 @@ function InputQuestion({ errors }) {
 
     const newQuestion = { question };
     console.log('Question submitted', newQuestion);
-    // ...call an API or dispatch Redux action here...
   };
 
   return (

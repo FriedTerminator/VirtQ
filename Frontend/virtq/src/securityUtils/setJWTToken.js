@@ -1,11 +1,13 @@
 import axios from "axios";
 
 const setJWTToken = token => {
-    if(token) {
-        axios.default.headers.common["Authorization"] = token;
-    } else {
-        delete axios.default.headers.common["Authorization"];
-    }
+  if (token) {
+    // Set the Authorization header for all future requests
+    axios.defaults.headers.common["Authorization"] = token;
+  } else {
+    // Remove it if no token
+    delete axios.defaults.headers.common["Authorization"];
+  }
 };
 
 export default setJWTToken;

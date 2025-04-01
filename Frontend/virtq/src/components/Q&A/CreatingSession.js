@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import classnames from "classnames";
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { createQA } from "../../actions/q&aActions";
 
-function CreatingSession({ errors }) {
+function CreatingSession({ createQA, errors }) {
     const[title, setTitle] = useState("");
-    const[host, setHost] = useState("");
+    const[qaIdentifier, setQAIdentifier] = useState("");
     const[passcode, setPasscode] = useState("");
     const[localErrors, setLocalErrors] = useState({});
 
@@ -15,14 +17,19 @@ function CreatingSession({ errors }) {
     }, [errors]);
 
     const onChange = (e) => {
-        const {name: fieldName, value: fieldValue} = e.target;
-
-        if(fieldName === "title") {
-            setTitle(fieldValue);
-        } else if(fieldName === "host") {
-            setHost(fieldValue);
-        } else if(fieldName === "passcode") {
-            setPasscode(fieldValue);
+        const {name, value} = e.target;
+        switch(name) {
+            case "title":
+                setTitle(value);
+                break;
+            case "qaIdentifier": 
+                setQAIdentifier(value);
+                break;
+            case "passcode":
+                setPasscode(value);
+                break;
+            default:
+                break;
         }
     };
 
@@ -31,11 +38,11 @@ function CreatingSession({ errors }) {
 
         const newSession = {
             title,
-            host,
+            qaIdentifier,
             passcode,
         };
 
-        console.log("Creating new session:", newSession);
+        createQA(newSession);
     };
 
     return (
@@ -56,25 +63,25 @@ function CreatingSession({ errors }) {
                                 value={title}
                                 onChange={onChange}
                             />
-                            {localErrors.name && (
-                                <div className="invalid-feedback">{localErrors.name}</div>
+                            {localErrors.title && (
+                                <div className="invalid-feedback">{localErrors.title}</div>
                             )}
                         </div>
 
                         <div className="form-group mt-3">
                             <input
                                 type="text"
-                                id="host"
-                                name="host"
+                                id="qaIdentifier"
+                                name="qaIdentifier"
                                 className={classnames("form-control form-control-lg", {
-                                "is-invalid": localErrors.host,
+                                "is-invalid": localErrors.qaIdentifier,
                                 })}
-                                placeholder="Enter the host name"
-                                value={host}
+                                placeholder="Unique Q&A ID"
+                                value={qaIdentifier}
                                 onChange={onChange}
                             />
-                            {localErrors.host && (
-                                <div className="invalid-feedback">{localErrors.host}</div>
+                            {localErrors.qaIdentifier && (
+                                <div className="invalid-feedback">{localErrors.qaIdentifier}</div>
                             )}
                         </div>
 
@@ -90,7 +97,7 @@ function CreatingSession({ errors }) {
                                 value={passcode}
                                 onChange={onChange}
                             />
-                            {localErrors.host && (
+                            {localErrors.passcode && (
                                 <div className="invalid-feedback">{localErrors.passcode}</div>
                             )}
                         </div>
@@ -107,7 +114,12 @@ function CreatingSession({ errors }) {
 }
 
 CreatingSession.propTypes = {
+    createQA: PropTypes.func.isRequired,
     errors: PropTypes.object.isRequired,
-}
+};
 
-export default CreatingSession;
+const mapStateToProps = state => ({
+    errors: state.errors || {}
+  })
+
+export default connect(mapStateToProps, { createQA })(CreatingSession);
