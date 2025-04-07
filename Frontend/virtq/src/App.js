@@ -13,6 +13,7 @@ import { jwtDecode } from 'jwt-decode';
 import setJWTToken from './securityUtils/setJWTToken';
 import { setCurrentUser, logout } from './actions/securityActions';
 import store from './store';
+import Details from './components/Q&A/Details';
 
 class App extends Component {
   componentDidMount() {
@@ -44,6 +45,7 @@ class App extends Component {
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/inputquestion" element={<InputQuestion />} />
           <Route exact path="/creating-session" element={<CreatingSession />} />
+          <Route exact path="/details/:qaIdentifier" element={<Details />}/>
         </Routes>
       </Router>
     );
