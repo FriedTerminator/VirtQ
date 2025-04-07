@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getQAS, deleteQA } from '../actions/q&aActions';
 
-function Dashboard({ qaList, getQAS }) {
+function Dashboard({ qaList, getQAS, deleteQA }) {
 
   useEffect(() => {
     getQAS();
@@ -18,7 +18,6 @@ function Dashboard({ qaList, getQAS }) {
   return (
     <div className="dashboard">
       <div className="container mt-4">
-        {/* Create Session Button */}
         <div className="d-flex justify-content-end mb-3">
           <Link to="/creating-session" className="btn btn-success">
             + Create Session

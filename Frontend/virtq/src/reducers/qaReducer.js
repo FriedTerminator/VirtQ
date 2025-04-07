@@ -20,7 +20,7 @@ export default function qaReducer(state = initialState, action) {
         case DELETE_QA:
             return {
                 ...state,
-                qaList: state.qaList.filter(qa => qa.id !== action.payload)
+                qaList: state.qaList.filter(qa => qa.qaIdentifier !== action.payload)
             };
         default:
             return state;
