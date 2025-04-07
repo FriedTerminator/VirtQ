@@ -3,9 +3,12 @@ import classnames from "classnames";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { createQA } from "../../actions/q&aActions";
+import { useNavigate } from 'react-router-dom';
 
 function CreatingSession({ createQA, errors }) {
-    const[title, setTitle] = useState("");
+    const navigate = useNavigate();
+
+    const[name, setName] = useState("");
     const[qaIdentifier, setQAIdentifier] = useState("");
     const[passcode, setPasscode] = useState("");
     const[localErrors, setLocalErrors] = useState({});
@@ -19,8 +22,8 @@ function CreatingSession({ createQA, errors }) {
     const onChange = (e) => {
         const {name, value} = e.target;
         switch(name) {
-            case "title":
-                setTitle(value);
+            case "name":
+                setName(value);
                 break;
             case "qaIdentifier": 
                 setQAIdentifier(value);
@@ -37,12 +40,12 @@ function CreatingSession({ createQA, errors }) {
         e.preventDefault();
 
         const newSession = {
-            title,
+            name,
             qaIdentifier,
             passcode,
         };
 
-        createQA(newSession);
+        createQA(newSession, navigate);
     };
 
     return (
@@ -56,15 +59,15 @@ function CreatingSession({ createQA, errors }) {
                             <input
                                 type="text"
                                 className={classnames("form-control form-control-lg", {
-                                    "is-invalid": localErrors.title
+                                    "is-invalid": localErrors.name
                                 })}
                                 placeholder="Enter the Q&A name"
-                                name="title"
-                                value={title}
+                                name="name"
+                                value={name}
                                 onChange={onChange}
                             />
-                            {localErrors.title && (
-                                <div className="invalid-feedback">{localErrors.title}</div>
+                            {localErrors.name && (
+                                <div className="invalid-feedback">{localErrors.name}</div>
                             )}
                         </div>
 

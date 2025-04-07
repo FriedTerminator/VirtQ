@@ -91,7 +91,7 @@ function SignUp({ createNewUser, errors }) {
                   className={classnames('form-control form-control-lg', {
                     'is-invalid': localErrors.lastName,
                   })}
-                  placeholder="Full Name"
+                  placeholder="Last Name"
                   name="lastName"
                   value={lastName}
                   onChange={onChange}

@@ -5,7 +5,7 @@ const initialState = {
     currentQA: {}
 };
 
-export default function(state = initialState, action) {
+export default function qaReducer(state = initialState, action) {
     switch(action.type) {
         case GET_QAS:
             return {
