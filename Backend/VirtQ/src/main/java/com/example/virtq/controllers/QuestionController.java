@@ -3,6 +3,7 @@ package com.example.virtq.controllers;
 import com.example.virtq.domain.QA;
 import com.example.virtq.domain.Question;
 import com.example.virtq.services.MapValidationErrorService;
+import com.example.virtq.services.QAService;
 import com.example.virtq.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,12 @@ public class QuestionController {
     @Autowired
     private final QuestionService questionService;
 
-    public QuestionController(QuestionService questionService) {
+    @Autowired
+    private final QAService qaService;
+
+    public QuestionController(QuestionService questionService, QAService qaService) {
         this.questionService = questionService;
+        this.qaService = qaService;
     }
 
     @PostMapping("/{qaId}")
@@ -52,6 +57,13 @@ public class QuestionController {
         question.setApproved(true);
         questionService.saveQuestion(qaId, question);
         return new ResponseEntity<Question>(question, HttpStatus.OK);
+    }
+
+    @GetMapping("/passcode/{passcode}")
+    public ResponseEntity<?> getQAByPasscode(@PathVariable String passcode) {
+        QA qa = qaService.findByPasscode(passcode);
+
+        return new ResponseEntity<>(qa, HttpStatus.OK);
     }
 
     @GetMapping("/qa/{qaId}/admin")

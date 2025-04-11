@@ -51,6 +51,16 @@ public class QAService {
         return qa;
     }
 
+    public QA findByPasscode(String passcode) {
+        QA qa = qaRepository.findByPasscode(passcode);
+
+        if(qa == null) {
+            throw new QANotFoundException("Q&A with passcode: '" + passcode + "' was not found");
+        }
+
+        return qa;
+    }
+
     public Iterable<QA> findAllQAs(String username) {
         return qaRepository.findAllByQaLeader(username);
     }

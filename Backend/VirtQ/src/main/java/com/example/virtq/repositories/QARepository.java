@@ -12,4 +12,6 @@ public interface QARepository extends CrudRepository<QA, Long> {
     Iterable<QA> findAll();
 
     Iterable<QA> findAllByQaLeader(String username);
+
+    QA findByPasscode(String passcode);
 }
