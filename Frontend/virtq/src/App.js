@@ -14,6 +14,7 @@ import setJWTToken from './securityUtils/setJWTToken';
 import { setCurrentUser, logout } from './actions/securityActions';
 import store from './store';
 import Details from './components/Q&A/Details';
+import EnterPasscode from './components/UserManagement/QuestionInput/EnterPasscode';
 
 class App extends Component {
   componentDidMount() {
@@ -43,7 +44,8 @@ class App extends Component {
           <Route exact path="/dashboard" element={<Dashboard />} />
           <Route exact path="/signup" element={<SignUp />}/>
           <Route exact path="/login" element={<Login />} />
-          <Route exact path="/inputquestion" element={<InputQuestion />} />
+          <Route path="/enter" element={<EnterPasscode />}/>
+          <Route path="/submit/:qaId" element={<InputQuestion />} />
           <Route exact path="/creating-session" element={<CreatingSession />} />
           <Route exact path="/details/:qaIdentifier" element={<Details />}/>
         </Routes>

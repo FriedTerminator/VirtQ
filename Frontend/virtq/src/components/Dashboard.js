@@ -27,7 +27,7 @@ function Dashboard({ qaList, getQAS, deleteQA }) {
         <div className="row">
           <div className="col-md-12">
             <div className="card text-center mb-4">
-              <div className="card-header bg-secondary text-white">
+              <div className="card-header bg-info text-white">
                 <h2>Created Sessions</h2>
               </div>
               <div className="card-body">
@@ -44,7 +44,7 @@ function Dashboard({ qaList, getQAS, deleteQA }) {
                           View Session
                         </Link>
                         <button
-                          className="btn btn-danger"
+                          className="btn btn-danger shadow-lg"
                           onClick={() => handleDelete(session.qaIdentifier)}
                         >
                           Delete
