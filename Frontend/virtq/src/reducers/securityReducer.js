@@ -5,20 +5,12 @@ const initialState = {
     user: {}
 }
 
-const booleanActionPayload = (payload) => {
-    if(payload) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
 export default function securityReducer(state = initialState, action) {
     switch(action.type) {
         case SET_CURRENT_USER:
             return {
                 ...state,
-                validToken: booleanActionPayload(action.payload),
+                validToken: Object.keys(action.payload).length !== 0,
                 user: action.payload
             };
         default:

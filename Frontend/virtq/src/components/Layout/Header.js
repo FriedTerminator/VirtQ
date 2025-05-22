@@ -10,8 +10,7 @@ function Header({ security, logout }) {
 
   const handleLogout = (e) => {
     e.preventDefault();
-    logout();
-    navigate("/");
+    logout(navigate);
   };
 
   const userIsAuthenticated = (
