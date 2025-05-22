@@ -79,6 +79,9 @@ public class SecurityConfig {
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
                                 .requestMatchers(SIGN_UP_URLS).permitAll()
                                 .requestMatchers(H2_URL).permitAll()
+
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/questions/passcode/**")).permitAll()
+                                .requestMatchers(AntPathRequestMatcher.antMatcher("/api/questions/*")).permitAll()
                                 .anyRequest().authenticated()
                 );
 
