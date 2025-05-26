@@ -1,6 +1,8 @@
 export const GET_ERRORS = "GET_ERRORS"
 
+export const SET_ACTIVE_QA = "SET_ACTIVE_QA"
 export const GET_QA = "GET_QA" 
+export const GET_QA_BY_PASSCODE = "GET_QA_BY_PASSCODE"
 export const GET_QAS = "GET_QAS"
 export const DELETE_QA = "DELETE_QA"
 

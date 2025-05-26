@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, GET_QA, GET_QAS, DELETE_QA } from "./types";
+import { GET_ERRORS, GET_QA, GET_QAS, DELETE_QA, GET_QA_BY_PASSCODE } from "./types";
 
 export const createQA = (qa, navigate) => async dispatch => {
     try {
@@ -40,7 +40,7 @@ export const getQAS = () => async dispatch => {
     });
 };
 
-export const deleteQA = id => async dispatch => {
+export const deleteQA = (id, navigate) => async dispatch => {
     // Optimistically update UI
     dispatch({
       type: DELETE_QA,
@@ -51,7 +51,23 @@ export const deleteQA = id => async dispatch => {
       await axios.delete(`/api/qa/${id}`);
     } catch (err) {
       console.error("❌ Failed to delete on server:", err.response?.data || err.message);
-      // Optional: show an error toast or notification
-      // Optional: re-fetch QAs or re-add this one to the list manually
+      navigate("/dashboard");
     }
   };
+
+  export const fetchQAByPasscode = (passcode) => async dispatch => {
+  try {
+    const res = await axios.get(`/api/questions/passcode/${passcode}`);
+    dispatch({
+      type: GET_QA_BY_PASSCODE,
+      payload: res.data
+    });
+    return res;
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    });
+    throw err;
+  }
+};

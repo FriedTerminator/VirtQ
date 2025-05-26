@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { connect } from "react-redux";
+import { fetchQAByPasscode } from "../../../actions/q&aActions";
 
-function EnterPasscode() {
+function EnterPasscode({fetchQAByPasscode}) {
     const [passcode, setPasscode] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ function EnterPasscode() {
         setError('');
 
         try {
-            const res = await axios.get(`/api/qa/passcode/${passcode}`);
+            const res = await fetchQAByPasscode(passcode);
             const qaId = res.data.qaIdentifier;
             navigate(`/submit/${qaId}`);
         } catch(error) {
@@ -44,4 +45,8 @@ function EnterPasscode() {
     );
 }
 
-export default EnterPasscode;
+const mapStateToProps = state => ({
+    activeQA: state.qa.activeQA
+});
+
+export default connect(mapStateToProps, {fetchQAByPasscode})(EnterPasscode);
