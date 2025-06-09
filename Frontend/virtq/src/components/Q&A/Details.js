@@ -48,8 +48,10 @@ function Details({ currentQA, getQA, getQuestions, deleteQuestion, questions }) 
                                         <li key={index} className="list-group-item">
                                             {q.text}
                                             <button 
+                                            className="btn btn-primary shadow-lg">Approve</button>
+                                            <button 
                                             className="btn btn-danger shadow-lg" 
-                                            onClick={() => handleDeleteQuestion(q)}>Approve</button>
+                                            onClick={() => handleDeleteQuestion(q.questionId)}>Remove</button>
                                         </li>
                                     ))}
                                 </ul>
