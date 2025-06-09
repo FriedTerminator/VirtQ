@@ -1,5 +1,6 @@
 package com.example.virtq.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
@@ -17,6 +18,7 @@ public class Question {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "qa_id", nullable = false)
+    @JsonBackReference
     private QA qa;
 
     public Question(){}

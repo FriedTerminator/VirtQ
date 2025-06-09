@@ -32,7 +32,7 @@ public class QuestionController {
     }
 
     @PostMapping("/{qaId}")
-    public ResponseEntity<?> createQuestion(@PathVariable QA qaId, @RequestBody Question question, BindingResult result) {
+    public ResponseEntity<?> createQuestion(@PathVariable String qaId, @RequestBody Question question, BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap!=null) return errorMap;
 
@@ -52,7 +52,7 @@ public class QuestionController {
     }
 
     @PutMapping("/{qaId}/{id}/approve")
-    public ResponseEntity<?> approveQuestion(@PathVariable QA qaId, @PathVariable Long id) {
+    public ResponseEntity<?> approveQuestion(@PathVariable String qaId, @PathVariable Long id) {
         Question question = questionService.getQuestionById(id);
         question.setApproved(true);
         questionService.saveQuestion(qaId, question);
