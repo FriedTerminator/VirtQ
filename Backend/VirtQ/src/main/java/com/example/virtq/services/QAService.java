@@ -51,6 +51,14 @@ public class QAService {
         return qa;
     }
 
+    public QA findByQaIdentifier(String qaIdentifier) {
+        QA qa = qaRepository.findByQaIdentifier(qaIdentifier.toUpperCase());
+        if (qa == null) {
+            throw new QANotFoundException("Q&A with identifier '" + qaIdentifier + "' not found");
+        }
+        return qa;
+    }
+
     public QA findByPasscode(String passcode) {
         QA qa = qaRepository.findByPasscode(passcode);
 
