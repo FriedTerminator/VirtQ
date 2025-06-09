@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { createQuestion } from '../../../actions/questionActions';
+import { getQA } from '../../../actions/q&aActions';
+import { connect } from 'react-redux';
+import { useParams } from "react-router-dom";
 
-function InputQuestion({ errors }) {
+function InputQuestion({ errors, createQuestion, getQA }) {
   const [question, setQuestion] = useState('');
   const [localErrors, setLocalErrors] = useState({});
+  const {qaId} = useParams();
+
+  useEffect(() => {
+    if (qaId) {
+      getQA(qaId)
+    }
+  }, [qaId, getQA]);
 
   useEffect(() => {
     if (errors) {
@@ -19,7 +30,8 @@ function InputQuestion({ errors }) {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const newQuestion = { question };
+    const newQuestion = { text: question };
+    createQuestion(qaId, newQuestion);
     console.log('Question submitted', newQuestion);
   };
 
@@ -60,4 +72,8 @@ InputQuestion.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
-export default InputQuestion;
+const mapStateToProps = state => ({
+  errors: state.errors
+})
+
+export default connect(mapStateToProps, {createQuestion, getQA})(InputQuestion);

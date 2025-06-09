@@ -34,9 +34,10 @@ export const getQA = (id, navigate) => async dispatch => {
 
 export const getQAS = () => async dispatch => {
     const res = await axios.get("/api/qa/all");
+    const qas = Array.isArray(res.data) ? res.data : res.data.qas || [];
     dispatch({
         type: GET_QAS,
-        payload: res.data
+        payload: qas
     });
 };
 
