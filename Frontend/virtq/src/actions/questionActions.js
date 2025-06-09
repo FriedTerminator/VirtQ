@@ -44,15 +44,15 @@ export const getQuestions = (qaId) => async dispatch => {
     }
 };
 
-export const deleteQuestion = id => async dispatch => {
+export const deleteQuestion = (questionId) => async dispatch => {
     // Optimistically update UI
     dispatch({
       type: DELETE_QUESTION,
-      payload: id
+      payload: questionId
     });
   
     try {
-      await axios.delete(`/api/qa/${id}`);
+      await axios.delete(`/api/qa/${questionId}`);
     } catch (error) {
       console.error("❌ Failed to delete on server:", error.response?.data || error.message);
       // Optional: show an error toast or notification

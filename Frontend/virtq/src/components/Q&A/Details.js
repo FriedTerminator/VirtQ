@@ -2,9 +2,9 @@ import React, {useEffect} from "react";
 import { useParams, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { getQA } from "../../actions/q&aActions";
-import { getQuestions } from "../../actions/questionActions";
+import { getQuestions, deleteQuestion } from "../../actions/questionActions";
 
-function Details({ currentQA, getQA, getQuestions, questions }) {
+function Details({ currentQA, getQA, getQuestions, deleteQuestion, questions }) {
     const { qaIdentifier } = useParams();
 
     useEffect(() => {
@@ -13,6 +13,12 @@ function Details({ currentQA, getQA, getQuestions, questions }) {
             getQuestions(qaIdentifier);
         }
     }, [qaIdentifier, getQA, getQuestions]);
+
+    const handleDeleteQuestion = (questionId) => {
+        if(window.confirm("Delete this question?")) {
+            deleteQuestion(questionId)
+        }
+    };
 
     return(
         <div className="container mt-5">
@@ -41,6 +47,9 @@ function Details({ currentQA, getQA, getQuestions, questions }) {
                                     {questions.map((q, index) => (
                                         <li key={index} className="list-group-item">
                                             {q.text}
+                                            <button 
+                                            className="btn btn-danger shadow-lg" 
+                                            onClick={() => handleDeleteQuestion(q)}>Approve</button>
                                         </li>
                                     ))}
                                 </ul>
@@ -60,4 +69,4 @@ const mapStateToProps = state => ({
     questions: state.qa.questions
 });
 
-export default connect(mapStateToProps, { getQA, getQuestions })(Details);
+export default connect(mapStateToProps, { getQA, getQuestions, deleteQuestion })(Details);
