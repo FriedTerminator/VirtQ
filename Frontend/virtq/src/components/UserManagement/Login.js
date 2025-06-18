@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { connect } from 'react-redux';
-import { login } from '../../actions/securityActions';
+import { clearErrors, login } from '../../actions/securityActions';
 import { useNavigate } from 'react-router-dom';
 
-function Login({ login, security, errors}) {
+function Login({ login, security, errors, clearErrors}) {
   const navigate = useNavigate(); // ✅ Call it here at the top of your component
 
   const [username, setUsername] = useState('');
@@ -25,6 +25,12 @@ function Login({ login, security, errors}) {
       setLocalErrors(errors);
     }
   }, [errors]);
+
+  useEffect(() => {
+    return () => {
+      clearErrors();
+    };
+  }, [clearErrors]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -104,4 +110,4 @@ const mapStateToProps = state => ({
   errors: state.errors || {}
 });
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { login, clearErrors })(Login);

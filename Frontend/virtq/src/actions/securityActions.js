@@ -1,5 +1,5 @@
 import axios from "axios";
-import { GET_ERRORS, SET_CURRENT_USER } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, CLEAR_ERRORS } from "./types";
 import setJWTToken from "../securityUtils/setJWTToken";
 import {jwtDecode} from "jwt-decode";
 
@@ -61,3 +61,9 @@ export const logout = (navigate) => dispatch => {
       navigate("/");
     }
   };
+
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
+  }
+};

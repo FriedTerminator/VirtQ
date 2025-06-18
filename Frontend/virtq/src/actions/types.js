@@ -1,4 +1,5 @@
 export const GET_ERRORS = "GET_ERRORS"
+export const CLEAR_ERRORS = "CLEAR_ERRORS"
 
 export const SET_ACTIVE_QA = "SET_ACTIVE_QA"
 export const GET_QA = "GET_QA" 
