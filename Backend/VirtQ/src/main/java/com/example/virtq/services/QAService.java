@@ -51,7 +51,7 @@ public class QAService {
         return qa;
     }
 
-    public QA findByQaIdentifier(String qaIdentifier) {
+    public QA findByQaIdentifierQuestion(String qaIdentifier) {
         QA qa = qaRepository.findByQaIdentifier(qaIdentifier.toUpperCase());
         if (qa == null) {
             throw new QANotFoundException("Q&A with identifier '" + qaIdentifier + "' not found");

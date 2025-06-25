@@ -38,10 +38,7 @@ public class QuestionController {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if (errorMap != null) return errorMap;
 
-        QA qa = qaService.findByQaIdentifier(qaIdentifier);
-        if (qa == null) {
-            return new ResponseEntity<>("Q&A session not found", HttpStatus.BAD_REQUEST);
-        }
+        QA qa = qaService.findByQaIdentifierQuestion(qaIdentifier.toUpperCase());
 
         Question savedQuestion = questionService.saveQuestion(qa, question);
         return new ResponseEntity<>(savedQuestion, HttpStatus.CREATED);
@@ -49,7 +46,7 @@ public class QuestionController {
 
     @GetMapping("/qa/{qaIdentifier}")
     public ResponseEntity<List<Question>> getQuestionsByQA(@PathVariable String qaIdentifier) {
-        QA qa = qaService.findByQaIdentifier(qaIdentifier);
+        QA qa = qaService.findByQaIdentifierQuestion(qaIdentifier);
         if (qa == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -66,7 +63,7 @@ public class QuestionController {
     @PutMapping("/{qaIdentifier}/{id}/approve")
     public ResponseEntity<?> approveQuestion(@PathVariable String qaIdentifier,
                                              @PathVariable Long id) {
-        QA qa = qaService.findByQaIdentifier(qaIdentifier);
+        QA qa = qaService.findByQaIdentifierQuestion(qaIdentifier);
         if (qa == null) {
             return new ResponseEntity<>("Q&A session not found", HttpStatus.BAD_REQUEST);
         }
@@ -89,7 +86,7 @@ public class QuestionController {
 
     @GetMapping("/qa/{qaIdentifier}/admin")
     public ResponseEntity<List<Question>> getQuestionsForAdmin(@PathVariable String qaIdentifier) {
-        QA qa = qaService.findByQaIdentifier(qaIdentifier);
+        QA qa = qaService.findByQaIdentifierQuestion(qaIdentifier);
         if (qa == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

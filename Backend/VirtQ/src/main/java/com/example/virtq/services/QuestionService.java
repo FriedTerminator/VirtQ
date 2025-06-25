@@ -27,12 +27,12 @@ public class QuestionService {
         this.questionWebSocketHandler = questionWebSocketHandler;
     }
 
-    public Question saveQuestion(QA qaId, Question question) {
-        QA qa = qaRepository.findByQaIdentifier(String.valueOf(qaId));
-
-        if(qa == null) {
-            throw new QANotFoundException("Q&A session not found");
-        }
+    public Question saveQuestion(QA qa, Question question) {
+//        QA qa = qaRepository.findByQaIdentifier(String.valueOf(qaId));
+//
+//        if(qa == null) {
+//            throw new QANotFoundException("Q&A session not found");
+//        }
 
         question.setQa(qa);
 
