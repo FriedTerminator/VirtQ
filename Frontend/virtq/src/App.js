@@ -45,7 +45,7 @@ class App extends Component {
           <Route exact path="/signup" element={<SignUp />}/>
           <Route exact path="/login" element={<Login />} />
           <Route path="/enter" element={<EnterPasscode />}/>
-          <Route path="/submit/:qaId" element={<InputQuestion />} />
+          <Route path="/submit/:qaIdentifier" element={<InputQuestion />} />
           <Route exact path="/creating-session" element={<CreatingSession />} />
           <Route exact path="/details/:qaIdentifier" element={<Details />}/>
         </Routes>

@@ -6,13 +6,13 @@ import { clearErrors, login } from '../../actions/securityActions';
 import { useNavigate } from 'react-router-dom';
 
 function Login({ login, security, errors, clearErrors}) {
-  const navigate = useNavigate(); // ✅ Call it here at the top of your component
+  const navigate = useNavigate(); // Call it here at the top of your component
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [localErrors, setLocalErrors] = useState({});
 
-  // ✅ Redirect when user is authenticated
+  // Redirect when user is authenticated
   useEffect(() => {
     if (security?.validToken) {
       navigate('/dashboard');

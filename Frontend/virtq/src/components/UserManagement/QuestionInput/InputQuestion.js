@@ -9,13 +9,7 @@ import { useParams } from "react-router-dom";
 function InputQuestion({ errors, createQuestion, getQA }) {
   const [question, setQuestion] = useState('');
   const [localErrors, setLocalErrors] = useState({});
-  const {qaId} = useParams();
-
-  useEffect(() => {
-    if (qaId) {
-      getQA(qaId)
-    }
-  }, [qaId, getQA]);
+  const {qaIdentifier} = useParams();
 
   useEffect(() => {
     if (errors) {
@@ -31,7 +25,7 @@ function InputQuestion({ errors, createQuestion, getQA }) {
     e.preventDefault();
 
     const newQuestion = { text: question };
-    createQuestion(qaId, newQuestion);
+    createQuestion(qaIdentifier, newQuestion);
     console.log('Question submitted', newQuestion);
   };
 

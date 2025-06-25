@@ -14,8 +14,7 @@ function EnterPasscode({fetchQAByPasscode}) {
 
         try {
             const res = await fetchQAByPasscode(passcode);
-            const qaId = res.data.qaIdentifier;
-            navigate(`/submit/${qaId}`);
+            navigate(`/submit/${res.data.qaIdentifier}`);
         } catch(error) {
             setError('Invalid passcode. Please try again.');
         }

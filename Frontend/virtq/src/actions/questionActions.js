@@ -20,9 +20,9 @@ export const createQuestion = (qaId, question, navigate) => async dispatch => {
     }
 };
 
-export const getQuestion = (id, navigate) => async dispatch => {
+export const getQuestion = (passcode, navigate) => async dispatch => {
     try {
-        const res = await axios.get(`/api/questions/${id}`);
+        const res = await axios.get(`/api/questions/${passcode}`);
         dispatch({
             type: GET_QUESTION,
             payload: res.data

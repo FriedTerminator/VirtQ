@@ -28,7 +28,7 @@ export const getQA = (id, navigate) => async dispatch => {
             payload: res.data
         });
     } catch(error) {
-        navigate("/dashboard");
+        navigate("/");
     }
 };
 
@@ -42,7 +42,6 @@ export const getQAS = () => async dispatch => {
 };
 
 export const deleteQA = (id, navigate) => async dispatch => {
-    // Optimistically update UI
     dispatch({
       type: DELETE_QA,
       payload: id
@@ -51,7 +50,7 @@ export const deleteQA = (id, navigate) => async dispatch => {
     try {
       await axios.delete(`/api/qa/${id}`);
     } catch (err) {
-      console.error("❌ Failed to delete on server:", err.response?.data || err.message);
+      console.error("Failed to delete on server:", err.response?.data || err.message);
       navigate("/dashboard");
     }
   };
@@ -67,7 +66,7 @@ export const deleteQA = (id, navigate) => async dispatch => {
   } catch (err) {
     dispatch({
       type: GET_ERRORS,
-      payload: err.response.data
+      payload: err.response?.data || {general: "Passcode lookup failed."}
     });
     throw err;
   }
