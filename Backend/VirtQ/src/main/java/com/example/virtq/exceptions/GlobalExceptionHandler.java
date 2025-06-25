@@ -61,4 +61,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+        UserNotFoundExceptionResponse exceptionResponse = new UserNotFoundExceptionResponse(
+                "Invalid username or password",
+                "Invalid username or password"
+        );
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }
