@@ -69,4 +69,4 @@ const mapStateToProps = state => ({
   errors: state.errors
 })
 
-export default connect(mapStateToProps, {createQuestion, getQA})(InputQuestion);
+export default connect(mapStateToProps, {createQuestion })(InputQuestion);
