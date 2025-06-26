@@ -35,6 +35,7 @@ export const getQuestion = (passcode, navigate) => async dispatch => {
 export const getQuestions = (qaId) => async dispatch => {
     try {
         const res = await axios.get(`/api/questions/qa/${qaId}`);
+        console.log("Loaded questions from API: ", res.data);
         dispatch({
             type: GET_QUESTIONS,
             payload: res.data
@@ -45,17 +46,14 @@ export const getQuestions = (qaId) => async dispatch => {
 };
 
 export const deleteQuestion = (questionId) => async dispatch => {
-    // Optimistically update UI
-    dispatch({
+    try {
+      await axios.delete(`/api/questions/${questionId}`);
+
+      dispatch({
       type: DELETE_QUESTION,
       payload: questionId
     });
-  
-    try {
-      await axios.delete(`/api/qa/${questionId}`);
     } catch (error) {
       console.error("❌ Failed to delete on server:", error.response?.data || error.message);
-      // Optional: show an error toast or notification
-      // Optional: re-fetch QAs or re-add this one to the list manually
     }
   };

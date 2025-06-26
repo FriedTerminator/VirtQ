@@ -20,7 +20,7 @@ export default function questionReducer(state = initialState, action) {
         case DELETE_QUESTION:
             return {
                 ...state,
-                questionsList: state.questionsList.filter(question => question.questionIdentifier !== action.payload)
+                questionsList: state.questionsList.filter(question => question.id !== action.payload)
             };
         default:
             return state;

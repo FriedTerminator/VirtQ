@@ -1,4 +1,4 @@
-import { GET_QA, GET_QAS, DELETE_QA, GET_QUESTIONS } from "../actions/types";
+import { GET_QA, GET_QAS, DELETE_QA } from "../actions/types";
 
 const initialState = {
     qaList: [],
@@ -22,11 +22,6 @@ export default function qaReducer(state = initialState, action) {
                 ...state,
                 qaList: state.qaList.filter(qa => qa.qaIdentifier !== action.payload)
             };
-        case GET_QUESTIONS:
-            return {
-                ...state,
-                questions: action.payload
-            }
         default:
             return state;
     }

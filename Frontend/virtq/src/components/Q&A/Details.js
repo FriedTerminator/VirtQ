@@ -51,7 +51,7 @@ function Details({ currentQA, getQA, getQuestions, deleteQuestion, questions }) 
                                             className="btn btn-primary shadow-lg">Approve</button>
                                             <button 
                                             className="btn btn-danger shadow-lg" 
-                                            onClick={() => handleDeleteQuestion(q.questionId)}>Remove</button>
+                                            onClick={() => handleDeleteQuestion(q.id)}>Remove</button>
                                         </li>
                                     ))}
                                 </ul>
@@ -68,7 +68,7 @@ function Details({ currentQA, getQA, getQuestions, deleteQuestion, questions }) 
 
 const mapStateToProps = state => ({
     currentQA: state.qa.currentQA,
-    questions: state.qa.questions
+    questions: state.question.questionsList
 });
 
 export default connect(mapStateToProps, { getQA, getQuestions, deleteQuestion })(Details);
