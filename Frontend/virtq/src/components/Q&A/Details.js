@@ -1,18 +1,48 @@
 import React, {useEffect} from "react";
 import { useParams, Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { getQA } from "../../actions/q&aActions";
 import { getQuestions, deleteQuestion } from "../../actions/questionActions";
 
 function Details({ currentQA, getQA, getQuestions, deleteQuestion, questions }) {
     const { qaIdentifier } = useParams();
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        const handleIds = new Set();
+
         if(qaIdentifier) {
             getQA(qaIdentifier);
             getQuestions(qaIdentifier);
         }
-    }, [qaIdentifier, getQA, getQuestions]);
+
+        const ws = new WebSocket("ws://localhost:8080/ws/questions");
+
+        ws.onopen = () => {
+            console.log("Websocket Connected");
+        };
+
+        ws.onmessage = (event) => {
+            const newQuestion = JSON.parse(event.data);
+            console.log("Received question via Websocket:", newQuestion);
+
+            if(handleIds.has(newQuestion.id)) return;
+
+            handleIds.add(newQuestion.id);
+
+            if(newQuestion.qaIdentifier === qaIdentifier) {
+                dispatch({type: 'ADD_QUESTION', payload: newQuestion });
+            }
+        };
+
+        ws.onclose = () => {
+            console.log("Websocket Disconnected");
+        };
+
+        return () => {
+            ws.close();
+        };
+    }, [qaIdentifier, dispatch, getQA, getQuestions]);
 
     const handleDeleteQuestion = (questionId) => {
         if(window.confirm("Delete this question?")) {

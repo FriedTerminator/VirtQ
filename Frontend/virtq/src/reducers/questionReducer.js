@@ -1,4 +1,4 @@
-import { GET_QUESTION, GET_QUESTIONS, DELETE_QUESTION } from "../actions/types";
+import { GET_QUESTION, GET_QUESTIONS, DELETE_QUESTION, ADD_QUESTION } from "../actions/types";
 
 const initialState = {
     questionsList: [],
@@ -21,6 +21,11 @@ export default function questionReducer(state = initialState, action) {
             return {
                 ...state,
                 questionsList: state.questionsList.filter(question => question.id !== action.payload)
+            };
+        case ADD_QUESTION:
+            return {
+                ...state,
+                questionsList: [action.payload, ...state.questionsList]
             };
         default:
             return state;
