@@ -9,6 +9,8 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
@@ -19,6 +21,7 @@ public class QuestionWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+        System.out.println("WebSocket connection established: " + session.getId());
         sessions.add(session);
     }
 
@@ -29,17 +32,26 @@ public class QuestionWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
+        System.out.println("WebSocket connection closed: " + session.getId());
         sessions.remove(session);
     }
 
     public void sendNewQuestion(Question question) {
-        String json;
         try {
-            json = objectMapper.writeValueAsString(question);
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("id", question.getId());
+            payload.put("text", question.getText());
+            payload.put("approved", question.isApproved());
+            payload.put("qaIdentifier", question.getQa().getQaIdentifier());
+
+            String json = objectMapper.writeValueAsString(payload);
             for(WebSocketSession session : sessions) {
-                session.sendMessage(new TextMessage(json));
+                if(session.isOpen()) {
+                    session.sendMessage(new TextMessage(json));
+                }
             }
         } catch (IOException e) {
+            System.err.println("WebSocket broadcast error");
             e.printStackTrace();
         }
     }

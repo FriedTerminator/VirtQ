@@ -1,5 +1,6 @@
 package com.example.virtq.controllers;
 
+import com.example.virtq.config.QuestionWebSocketHandler;
 import com.example.virtq.domain.QA;
 import com.example.virtq.domain.Question;
 import com.example.virtq.services.MapValidationErrorService;
@@ -19,6 +20,9 @@ public class QuestionController {
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
+
+    @Autowired
+    private QuestionWebSocketHandler questionWebSocketHandler;
 
     @Autowired
     private final QuestionService questionService;
@@ -41,6 +45,9 @@ public class QuestionController {
         QA qa = qaService.findByQaIdentifierQuestion(qaIdentifier.toUpperCase());
 
         Question savedQuestion = questionService.saveQuestion(qa, question);
+
+        questionWebSocketHandler.sendNewQuestion(savedQuestion);
+
         return new ResponseEntity<>(savedQuestion, HttpStatus.CREATED);
     }
 

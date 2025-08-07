@@ -77,6 +77,7 @@ public class SecurityConfig {
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/static/**")).permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/public/**")).permitAll()
                                 .requestMatchers(AntPathRequestMatcher.antMatcher("/api/auth/**")).permitAll()
+                                .requestMatchers("/ws/**").permitAll()
                                 .requestMatchers(SIGN_UP_URLS).permitAll()
                                 .requestMatchers(H2_URL).permitAll()
 
