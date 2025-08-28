@@ -28,11 +28,25 @@ class App extends Component {
       const currentTime = Date.now() / 1000;
       if (decoded.exp < currentTime) {
         store.dispatch(logout());
-        window.location.href = "/";
+        window.location.replace("/");
       } else {
         store.dispatch(setCurrentUser(decoded));
       }
+    } else {
+      store.dispatch(setCurrentUser({}));
     }
+
+    this.onStorage = (e) => {
+      if(e.key === "logout") {
+        store.dispatch(logout());
+        window.location.replace("/")
+      }
+    };
+    window.addEventListener("storage", this.onStorage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("storage", this.onStorage);
   }
 
   render() {

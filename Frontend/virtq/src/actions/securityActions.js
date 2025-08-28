@@ -53,6 +53,9 @@ export const login = (LoginRequest, navigate) => async dispatch => {
 export const logout = (navigate) => dispatch => {
     localStorage.removeItem("jwtToken");
     setJWTToken(false);
+
+    localStorage.setItem("logout", Date.now());
+
     dispatch({
       type: SET_CURRENT_USER,
       payload: {}
