@@ -3,6 +3,7 @@ package com.example.virtq.controllers;
 import com.example.virtq.config.QuestionWebSocketHandler;
 import com.example.virtq.domain.QA;
 import com.example.virtq.domain.Question;
+import com.example.virtq.services.GeminiService;
 import com.example.virtq.services.MapValidationErrorService;
 import com.example.virtq.services.QAService;
 import com.example.virtq.services.QuestionService;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/questions")
 public class QuestionController {
+    private final GeminiService geminiService;
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -30,7 +32,8 @@ public class QuestionController {
     @Autowired
     private final QAService qaService;
 
-    public QuestionController(QuestionService questionService, QAService qaService) {
+    public QuestionController(GeminiService geminiService, QuestionService questionService, QAService qaService) {
+        this.geminiService = geminiService;
         this.questionService = questionService;
         this.qaService = qaService;
     }
@@ -105,5 +108,17 @@ public class QuestionController {
     public ResponseEntity<?> deleteQuestion(@PathVariable Long id) {
         questionService.deleteQuestion(id);
         return new ResponseEntity<>("Question with ID: '" + id + "' was deleted", HttpStatus.OK);
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<?> checkQuestion(@RequestBody QuestionCheckRequest request) {
+        boolean isRelated = geminiService.isQuestionRelated(request.getQuestion(), request.getTopic());
+
+        return ResponseEntity.ok(new QuestionCheckResponse(isRelated));
+    }
+
+    public static class QuestionCheckRequest {
+        private String question;
+        private String topic;
     }
 }
