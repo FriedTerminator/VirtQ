@@ -7,6 +7,8 @@ import com.example.virtq.services.GeminiService;
 import com.example.virtq.services.MapValidationErrorService;
 import com.example.virtq.services.QAService;
 import com.example.virtq.services.QuestionService;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -110,15 +112,52 @@ public class QuestionController {
         return new ResponseEntity<>("Question with ID: '" + id + "' was deleted", HttpStatus.OK);
     }
 
-    @PostMapping("/check")
-    public ResponseEntity<?> checkQuestion(@RequestBody QuestionCheckRequest request) {
-        boolean isRelated = geminiService.isQuestionRelated(request.getQuestion(), request.getTopic());
+    @PostMapping("/{qaIdentifier}/check")
+    public ResponseEntity<?> checkQuestion(@PathVariable String qaIdentifier,
+                                           @RequestBody @Valid QuestionCheckRequest request,
+                                           BindingResult result) {
+        ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
+        if (errorMap != null) return errorMap;
 
-        return ResponseEntity.ok(new QuestionCheckResponse(isRelated));
+        QA qa = qaService.findByQaIdentifierQuestion(qaIdentifier);
+        if(qa == null) {
+            return new ResponseEntity<>("Q&A session not found", HttpStatus.BAD_REQUEST);
+
+            String topic = (request.getTopicOverride() != null && !request.getTopicOverride().isBlank())
+                    ? request.getTopicOverride()
+                    : qa.getName();
+
+            GeminiService.ClassificationResult res = geminiService.isQuestionRelated(request.getText(), topic);
+
+            return ResponseEntity.ok(new QuestionCheckResponse(res.related(), res.score(), res.reason()));
+        }
     }
 
     public static class QuestionCheckRequest {
-        private String question;
-        private String topic;
+        @NotBlank(message = "Question text is required")
+        private String text;
+        private String topicOverride; // optional: let admins override topic if needed
+
+        public String getText() { return text; }
+        public void setText(String text) { this.text = text; }
+        public String getTopicOverride() { return topicOverride; }
+        public void setTopicOverride(String topicOverride) { this.topicOverride = topicOverride; }
+    }
+
+    public static class QuestionCheckResponse {
+        private boolean related;
+        private Double score;  // optional if your GeminiService can return confidence
+        private String reason; // optional brief explanation
+
+        public QuestionCheckResponse(boolean related) { this.related = related; }
+        public QuestionCheckResponse(boolean related, Double score, String reason) {
+            this.related = related; this.score = score; this.reason = reason;
+        }
+        public boolean isRelated() { return related; }
+        public void setRelated(boolean related) { this.related = related; }
+        public Double getScore() { return score; }
+        public void setScore(Double score) { this.score = score; }
+        public String getReason() { return reason; }
+        public void setReason(String reason) { this.reason = reason; }
     }
 }

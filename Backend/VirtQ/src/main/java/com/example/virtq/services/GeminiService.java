@@ -17,11 +17,5 @@ public class GeminiService {
     public boolean isQuestionRelated(String question, String topic) {
         String prompt = String.format(
                 "Answer strictly YES or NO.\nTopic: %s\nQuestion: %s", topic, question);
-
-        GenerateContentResponse response =
-                client.models.generateContent("gemini-2.5-flash", prompt, null);
-
-        String out = response.text().trim();
-        return out.equalsIgnoreCase("YES");
     }
 }
