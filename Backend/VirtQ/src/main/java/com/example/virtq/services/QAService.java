@@ -25,6 +25,8 @@ public class QAService {
             qa.setUser(user);
             qa.setQaLeader(user.getUsername());
             qa.setQaIdentifier(qa.getQaIdentifier().toUpperCase());
+            qa.setCreate_At(qa.getCreate_At());
+            qa.setDescription(qa.getDescription());
 
             if(qa.getId() == null) {
 

@@ -28,13 +28,31 @@ public class GeminiService {
     /** Full result with score + reason */
     public ClassificationResult isQuestionRelatedWithScore(String questionText, String topic) {
         String prompt = """
-            You are a strict JSON-only classifier.
-            Respond ONLY in valid JSON with this exact structure:
-            { "related": true|false, "score": 0..1, "reason": "<short>" }
+You are a STRICT topic relevance classifier.
 
-            TOPIC: %s
-            QUESTION: %s
-            """.formatted(topic, questionText);
+Return ONLY JSON:
+{ "related": true|false, "score": 0..1, "reason": "<short>" }
+
+Rules:
+- related=true ONLY if the QUESTION is clearly about the TOPIC scope.
+- If ambiguous or partially related, set related=false.
+- Prefer precision over recall (avoid false positives).
+- Score is your confidence the question is in-scope (not generic similarity).
+
+TOPIC SCOPE:
+%s
+
+OUT-OF-SCOPE EXAMPLES:
+- logistics about other events
+- generic career advice if topic is technical deep-dive
+- personal questions to the host unless on-topic
+
+FORMAT STRICTNESS:
+- Output JSON only. No prose, no code fences.
+
+QUESTION:
+%s
+""".formatted(topic, questionText);
 
         try {
             GenerateContentResponse response =

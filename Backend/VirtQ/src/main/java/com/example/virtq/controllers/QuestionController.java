@@ -16,6 +16,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("api/questions")
@@ -124,9 +126,9 @@ public class QuestionController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        String topic = (request.getTopicOverride() != null && !request.getTopicOverride().isBlank())
-                ? request.getTopicOverride()
-                : qa.getName();
+        String topic = Stream.of(qa.getName(), qa.getDescription())
+                .filter(s -> s != null && !s.isBlank())
+                .collect(Collectors.joining("-"));
 
         GeminiService.ClassificationResult res =
                 geminiService.isQuestionRelatedWithScore(request.getText(), topic);

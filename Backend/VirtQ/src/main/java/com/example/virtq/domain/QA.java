@@ -42,6 +42,9 @@ public class QA {
     @JsonManagedReference
     private List<Question> questions = new ArrayList<>();
 
+    @NotBlank
+    private String description;
+
     public QA() {
 
     }
@@ -108,5 +111,13 @@ public class QA {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
