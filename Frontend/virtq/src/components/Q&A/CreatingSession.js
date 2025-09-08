@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -11,7 +11,18 @@ function CreatingSession({ createQA, errors }) {
     const[name, setName] = useState("");
     const[qaIdentifier, setQAIdentifier] = useState("");
     const[passcode, setPasscode] = useState("");
+    const[description, setDescription] = useState("");
     const[localErrors, setLocalErrors] = useState({});
+
+    const descRef = useRef(null);
+    const onDescriptionChange = (e) => {
+        setDescription(e.target.value);
+        const el = descRef.current;
+        if (el) {
+            el.style.height = "auto";
+            el.style.height = `${el.scrollHeight}px`;
+        }
+    };
 
     useEffect(() => {
         if(errors) {
@@ -31,6 +42,9 @@ function CreatingSession({ createQA, errors }) {
             case "passcode":
                 setPasscode(value);
                 break;
+            case "description":
+                setDescription(value);
+                break;
             default:
                 break;
         }
@@ -43,6 +57,7 @@ function CreatingSession({ createQA, errors }) {
             name,
             qaIdentifier,
             passcode,
+            description,
         };
 
         createQA(newSession, navigate);
@@ -103,6 +118,29 @@ function CreatingSession({ createQA, errors }) {
                             {localErrors.passcode && (
                                 <div className="invalid-feedback">{localErrors.passcode}</div>
                             )}
+                        </div>
+
+                        <div>
+                            <label htmlFor="description" className="form-label fw-semibold">Session description</label>
+                            <textarea 
+                                id="description"
+                                name="description"
+                                ref={descRef}
+                                rows={3}
+                                onChange={onDescriptionChange}
+                                value={description}
+                                className={classnames("form-control form-control-lg", {
+                                    "is-invalid": localErrors.description,
+                                })}
+                                placeholder="Provide a detailed description of the Q&A (scope, allowed topics, examples)..."
+                                style={{ overflow: "hidden", resize: "none" }}
+                            />
+                            {localErrors.description && (
+                                <div className="invalid-feedback">{localErrors.description}</div>
+                            )}
+                            <div className="form-text text-muted">
+                                Tip: Be specific. Clear scope helps filter off-topic questions.
+                            </div>
                         </div>
                         
                         <button type="submit" className="btn btn-info btn-block mt-3">
