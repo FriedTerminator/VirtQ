@@ -113,30 +113,31 @@ public class QuestionController {
     }
 
     @PostMapping("/{qaIdentifier}/check")
-    public ResponseEntity<?> checkQuestion(@PathVariable String qaIdentifier,
-                                           @RequestBody @Valid QuestionCheckRequest request,
-                                           BindingResult result) {
+    public ResponseEntity<QuestionCheckResponse> checkQuestion(@PathVariable String qaIdentifier,
+                                                               @RequestBody @Valid QuestionCheckRequest request,
+                                                               BindingResult result) {
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if (errorMap != null) return errorMap;
+        if (errorMap != null) return (ResponseEntity<QuestionCheckResponse>) errorMap;
 
         QA qa = qaService.findByQaIdentifierQuestion(qaIdentifier);
-        if(qa == null) {
-            return new ResponseEntity<>("Q&A session not found", HttpStatus.BAD_REQUEST);
-
-            String topic = (request.getTopicOverride() != null && !request.getTopicOverride().isBlank())
-                    ? request.getTopicOverride()
-                    : qa.getName();
-
-            GeminiService.ClassificationResult res = geminiService.isQuestionRelated(request.getText(), topic);
-
-            return ResponseEntity.ok(new QuestionCheckResponse(res.related(), res.score(), res.reason()));
+        if (qa == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
+        String topic = (request.getTopicOverride() != null && !request.getTopicOverride().isBlank())
+                ? request.getTopicOverride()
+                : qa.getName();
+
+        GeminiService.ClassificationResult res =
+                geminiService.isQuestionRelatedWithScore(request.getText(), topic);
+
+        return ResponseEntity.ok(new QuestionCheckResponse(res.related(), res.score(), res.reason()));
     }
 
     public static class QuestionCheckRequest {
         @NotBlank(message = "Question text is required")
         private String text;
-        private String topicOverride; // optional: let admins override topic if needed
+        private String topicOverride;
 
         public String getText() { return text; }
         public void setText(String text) { this.text = text; }
@@ -146,13 +147,14 @@ public class QuestionController {
 
     public static class QuestionCheckResponse {
         private boolean related;
-        private Double score;  // optional if your GeminiService can return confidence
-        private String reason; // optional brief explanation
+        private Double score;
+        private String reason;
 
         public QuestionCheckResponse(boolean related) { this.related = related; }
         public QuestionCheckResponse(boolean related, Double score, String reason) {
             this.related = related; this.score = score; this.reason = reason;
         }
+
         public boolean isRelated() { return related; }
         public void setRelated(boolean related) { this.related = related; }
         public Double getScore() { return score; }
