@@ -10,6 +10,8 @@ import com.example.virtq.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class QAService {
 
@@ -25,7 +27,7 @@ public class QAService {
             qa.setUser(user);
             qa.setQaLeader(user.getUsername());
             qa.setQaIdentifier(qa.getQaIdentifier().toUpperCase());
-            qa.setCreate_At(qa.getCreate_At());
+            qa.setCreate_At(LocalDate.now());
             qa.setDescription(qa.getDescription());
 
             if(qa.getId() == null) {

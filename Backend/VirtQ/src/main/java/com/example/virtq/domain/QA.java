@@ -7,8 +7,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -32,9 +32,9 @@ public class QA {
     @NotBlank(message = "Must provide a passcode to join Q&A")
     private String passcode;
 
-    @JsonFormat(pattern = "yyyy-mm-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(updatable = false)
-    private Date create_At;
+    private LocalDate create_At;
 
     private String qaLeader;
 
@@ -43,6 +43,7 @@ public class QA {
     private List<Question> questions = new ArrayList<>();
 
     @NotBlank
+    @Column(columnDefinition = "text", nullable = true)
     private String description;
 
     public QA() {
@@ -81,11 +82,11 @@ public class QA {
         this.passcode = passcode;
     }
 
-    public Date getCreate_At() {
+    public LocalDate getCreate_At() {
         return create_At;
     }
 
-    public void setCreate_At(Date create_At) {
+    public void setCreate_At(LocalDate create_At) {
         this.create_At = create_At;
     }
 
