@@ -11,8 +11,6 @@ import java.util.Set;
 
 @Service
 public class GeminiService {
-
-    // Use a descriptive field name so the accessor is r.related()
     public record ClassificationResult(boolean related, Double score, String reason) {}
     public record ModerationResult(boolean blocked, String category, String severity, String reason) {}
 

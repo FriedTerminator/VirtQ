@@ -181,7 +181,6 @@ public class QuestionController {
                 .reduce((a, b) -> a + " — " + b)
                 .orElse(qa.getName() == null ? "" : qa.getName());
 
-        // You can add more fields here later (e.g., allowed keywords)
         return scope;
     }
 
