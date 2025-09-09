@@ -27,9 +27,9 @@ function InputQuestion({ errors, createQuestion }) {
     setSubmitting(true)
     try {
       const newQuestion = { text: question };
-      const res = await createQuestion(qaIdentifier, newQuestion);
+      const created = await createQuestion(qaIdentifier, newQuestion);
 
-      if(res && res.status === 201) {
+      if(created) {
         setQuestion('');
         setLocalErrors({});
         setNotice({type: 'success', message: 'Your question was submitted successfully.'});

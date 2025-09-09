@@ -1,10 +1,10 @@
 import axios from "axios";
-import { GET_QUESTIONS, GET_QUESTION, DELETE_QUESTION, GET_ERRORS, CHECK_QUESTION_RESULT } from "./types";
+import { GET_QUESTIONS, GET_QUESTION, DELETE_QUESTION, GET_ERRORS } from "./types";
 
 export const createQuestion = (qaId, question, navigate) => async dispatch => {
     try {
         const check = await dispatch(checkQuestion(qaId, question.text));
-        if (check && check.realted === false) {
+        if (check && check.related === false) {
             dispatch({
                 type: GET_ERRORS,
                 payload: { text: check.reason || "Question appears off-topic."},
@@ -17,8 +17,7 @@ export const createQuestion = (qaId, question, navigate) => async dispatch => {
             type: GET_ERRORS,
             payload: {}
         });
-        navigate("/dashboard");
-        return res;
+        return res.data;
     } catch (error) {
         dispatch({
             type: GET_ERRORS,
@@ -71,11 +70,6 @@ export const checkQuestion = (qaIdentifier, text, topicOverride) => async dispat
     try {
         const body = { text, topicOverride };
         const res = await axios.post(`/api/questions/${qaIdentifier}/check`, body);
-
-        dispatch({
-            type: CHECK_QUESTION_RESULT,
-            payload: res.data,
-        });
 
         return res.data;
     } catch(error) {
