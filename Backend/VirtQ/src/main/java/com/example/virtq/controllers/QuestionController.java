@@ -50,11 +50,38 @@ public class QuestionController {
         if (errorMap != null) return errorMap;
 
         QA qa = qaService.findByQaIdentifierQuestion(qaIdentifier.toUpperCase());
+        if (qa == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Q&A session not found");
+        }
 
+        String topicScope = buildTopicScope(qa);
+
+        // 1) quick profanity prefilter
+        if (GeminiService.containsProfanity(question.getText())) {
+            return ResponseEntity.unprocessableEntity().body("Question rejected (inappropriate language).");
+        }
+
+        // 2) LLM moderation
+        GeminiService.ModerationResult mod = geminiService.moderateText(question.getText());
+        if (mod.blocked()) {
+            return ResponseEntity.unprocessableEntity().body("Rejected by moderation: " + mod.reason());
+        }
+
+        // 3) Relevance check
+        GeminiService.ClassificationResult rel =
+                geminiService.isQuestionRelatedWithScore(question.getText(), topicScope);
+
+        double THRESH = 0.65;
+        boolean pass = rel.related() && (rel.score() == null || rel.score() >= THRESH);
+        if (!pass) {
+            return ResponseEntity.unprocessableEntity().body(
+                    "Off-topic for this session" + (rel.reason() == null || rel.reason().isBlank() ? "" : (": " + rel.reason()))
+            );
+        }
+
+        // Passed all gates → save & broadcast
         Question savedQuestion = questionService.saveQuestion(qa, question);
-
         questionWebSocketHandler.sendNewQuestion(savedQuestion);
-
         return new ResponseEntity<>(savedQuestion, HttpStatus.CREATED);
     }
 
@@ -145,6 +172,17 @@ public class QuestionController {
         public void setText(String text) { this.text = text; }
         public String getTopicOverride() { return topicOverride; }
         public void setTopicOverride(String topicOverride) { this.topicOverride = topicOverride; }
+    }
+
+    private static String buildTopicScope(QA qa) {
+        // Combine name + description for a rich topic scope
+        String scope = Stream.of(qa.getName(), qa.getDescription())
+                .filter(s -> s != null && !s.isBlank())
+                .reduce((a, b) -> a + " — " + b)
+                .orElse(qa.getName() == null ? "" : qa.getName());
+
+        // You can add more fields here later (e.g., allowed keywords)
+        return scope;
     }
 
     public static class QuestionCheckResponse {
