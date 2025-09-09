@@ -71,6 +71,7 @@ function CreatingSession({ createQA, errors }) {
                     <h1 className="display-4 mb-4 text-center">Create a Q&A Session</h1>
                     <form onSubmit={onSubmit} className="form-group">
                         <div className="form-group mt-3">
+                            <label htmlFor="description" className="form-label fw-semibold">Q&A Name</label>
                             <input
                                 type="text"
                                 className={classnames("form-control form-control-lg", {
@@ -87,6 +88,7 @@ function CreatingSession({ createQA, errors }) {
                         </div>
 
                         <div className="form-group mt-3">
+                            <label htmlFor="description" className="form-label fw-semibold">Q&A ID</label>
                             <input
                                 type="text"
                                 id="qaIdentifier"
@@ -104,6 +106,7 @@ function CreatingSession({ createQA, errors }) {
                         </div>
 
                         <div className="form-group mt-3">
+                            <label htmlFor="description" className="form-label fw-semibold">Passcode</label>
                             <input
                                 type="text"
                                 id="passcode"
@@ -121,7 +124,7 @@ function CreatingSession({ createQA, errors }) {
                         </div>
 
                         <div>
-                            <label htmlFor="description" className="form-label fw-semibold">Session description</label>
+                            <label htmlFor="description" className="form-label fw-semibold">Session Description</label>
                             <textarea 
                                 id="description"
                                 name="description"

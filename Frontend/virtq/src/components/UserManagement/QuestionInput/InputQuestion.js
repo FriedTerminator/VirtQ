@@ -8,6 +8,9 @@ import { useParams } from "react-router-dom";
 function InputQuestion({ errors, createQuestion }) {
   const [question, setQuestion] = useState('');
   const [localErrors, setLocalErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [notice, setNotice] = useState({type: null, message: ''});
+
   const {qaIdentifier} = useParams();
 
   useEffect(() => {
@@ -16,16 +19,30 @@ function InputQuestion({ errors, createQuestion }) {
     }
   }, [errors]);
 
-  const onChange = (e) => {
-    setQuestion(e.target.value);
-  };
+  const onChange = (e) => setQuestion(e.target.value);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    setNotice({type: null, message: ''});
+    setSubmitting(true)
+    try {
+      const newQuestion = { text: question };
+      const res = await createQuestion(qaIdentifier, newQuestion);
 
-    const newQuestion = { text: question };
-    createQuestion(qaIdentifier, newQuestion);
-    console.log('Question submitted', newQuestion);
+      if(res && res.status === 201) {
+        setQuestion('');
+        setLocalErrors({});
+        setNotice({type: 'success', message: 'Your question was submitted successfully.'});
+      } else {
+        const msg = (errors && (errors.general || errors.text || errors.message)) ||
+        'Could not submit your question. Please try again.';
+        setNotice({type: 'danger', message: msg});
+      }
+    } catch (err) {
+      setNotice({type: 'danger', message: 'Something went wrong. Please try again.'});
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -34,6 +51,18 @@ function InputQuestion({ errors, createQuestion }) {
         <div className="row">
           <div className="col-md-8 m-auto">
             <h1 className="display-4 text-center">Enter Your Question</h1>
+
+              {/* Notice banner */}
+              {notice.type && (
+                <div
+                  className={`alert alert-${notice.type} mt-3`}
+                  role="status"
+                  aria-live="polite"
+                >
+                  {notice.message}
+                </div>
+              )}
+
             <form onSubmit={onSubmit} className="form-group">
               <input
                 type="text"
@@ -44,15 +73,22 @@ function InputQuestion({ errors, createQuestion }) {
                 name="question"
                 value={question}
                 onChange={onChange}
+                disabled={submitting}
+                aria-disabled={submitting}
               />
               {localErrors.question && (
                 <div className="invalid-feedback">{localErrors.question}</div>
               )}
-              <input
+
+              <button
                 type="submit"
                 className="btn btn-info btn-block mt-3"
-                value="Submit"
-              />
+                disabled={!question.trim() || submitting}
+              >{submitting ? 'Submitting...' : 'Submit'}</button>
+
+              <div className="form-text text-muted mt-2">
+                Keep it on-topic. Inappropriate or off-topic questions will be rejected.
+              </div>
             </form>
           </div>
         </div>
